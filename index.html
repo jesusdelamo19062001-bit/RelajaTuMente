@@ -1584,7 +1584,7 @@ let currentUser = null;
 let allAvisos = [];
 let allPresupuestos = [];
 let currentAvisoFilter = 'pendiente';
-let currentPresupFilter = 'todos';
+let currentPresupFilter = 'pendiente';
 let selectedAvisoColor = 'green';
 let calYear, calMonth;
 let detailAvisoId = null;
@@ -1747,7 +1747,6 @@ window.showPage = function(page, btn) {
 
 // ─── MODAL ───
 window.openModal = function(id) {
-  if (id === 'modal-presup') initPresupLines();
   document.getElementById(id).classList.add('open');
 };
 
@@ -1768,10 +1767,16 @@ window.closeModal = function(id) {
     document.getElementById('presup-cliente').value = '';
     document.getElementById('presup-fecha').value = '';
     document.getElementById('presup-descripcion').value = '';
+    document.getElementById('presup-precio-base').value = '';
     document.getElementById('presup-total-preview').textContent = '0,00 €';
+    document.getElementById('iva-info-text').textContent = '';
     presupLineCount = 0;
     currentIva = 0;
-    document.getElementById('presup-lines-container').innerHTML = '';
+    document.querySelectorAll('.iva-btn').forEach((b,i) => {
+      b.style.background = i===0 ? 'var(--accent)' : 'transparent';
+      b.style.borderColor = i===0 ? 'var(--accent)' : 'var(--border)';
+      b.style.color = i===0 ? '#fff' : 'var(--text2)';
+    });
   }
 };
 
@@ -2142,33 +2147,7 @@ window.filterPresup = function(f, btn) {
   renderPresupuestos(f);
 };
 
-function initPresupLines() {
-  presupLineCount = 0;
-  document.getElementById('presup-lines-container').innerHTML = '';
-  addPresupLine();
-}
-
-window.addPresupLine = function() {
-  presupLineCount++;
-  const id = presupLineCount;
-  const div = document.createElement('div');
-  div.className = 'presup-line-row';
-  div.id = `pline-${id}`;
-  div.innerHTML = `
-    <input type="text" placeholder="Descripción" class="pline-desc" oninput="updatePresupTotal()">
-    <input type="number" placeholder="Ud." class="pline-qty" style="flex:0.5;min-width:50px" oninput="updatePresupTotal()">
-    <input type="number" placeholder="€" class="pline-price" style="flex:0.7;min-width:60px" step="0.01" oninput="updatePresupTotal()">
-    <button class="presup-line-remove" onclick="removeLine(${id})"><i class="fas fa-times"></i></button>
-  `;
-  document.getElementById('presup-lines-container').appendChild(div);
-};
-
-window.removeLine = function(id) {
-  const el = document.getElementById(`pline-${id}`);
-  if (el) el.remove();
-  updatePresupTotal();
-};
-
+// ─── IVA (simple, sobre precio total) ───
 window.applyIva = function(pct) {
   currentIva = pct;
   document.querySelectorAll('.iva-btn').forEach(b => {
@@ -2183,12 +2162,11 @@ window.applyIva = function(pct) {
     btns[map[pct]].style.borderColor = 'var(--accent)';
     btns[map[pct]].style.color = '#fff';
   }
-  updatePresupTotal();
+  updatePresupTotalSimple();
 };
 
-window.updatePresupTotal = function() {
-  const lines = getPresupLines();
-  const base = calcTotal(lines);
+window.updatePresupTotalSimple = function() {
+  const base = parseFloat(document.getElementById('presup-precio-base')?.value) || 0;
   const ivaAmount = base * (currentIva / 100);
   const total = base + ivaAmount;
   const ivaInfo = document.getElementById('iva-info-text');
@@ -2201,15 +2179,7 @@ window.updatePresupTotal = function() {
   }
 };
 
-function getPresupLines() {
-  const rows = document.querySelectorAll('#presup-lines-container .presup-line-row');
-  return Array.from(rows).map(r => ({
-    desc: r.querySelector('.pline-desc').value.trim(),
-    qty: parseFloat(r.querySelector('.pline-qty').value) || 1,
-    price: parseFloat(r.querySelector('.pline-price').value) || 0
-  })).filter(l => l.desc || l.price);
-}
-
+// mantener calcTotal por compatibilidad con datos antiguos
 function calcTotal(lineas) {
   return (lineas || []).reduce((sum, l) => sum + ((l.qty||1) * (l.price||0)), 0);
 }
@@ -2222,15 +2192,14 @@ window.savePresup = async function() {
   const editId = document.getElementById('presup-edit-id').value;
   if (!nombre) return showToast('Escribe un nombre para el presupuesto');
   if (!currentUser) return showToast('Error: no hay sesión activa');
-  const lineas = getPresupLines();
-  const baseTotal = calcTotal(lineas);
+  const baseTotal = parseFloat(document.getElementById('presup-precio-base').value) || 0;
   const ivaAmount = baseTotal * (currentIva / 100);
   const totalConIva = baseTotal + ivaAmount;
   const { collection, addDoc, doc, updateDoc, serverTimestamp } = window._fns;
   const db = window._db;
   try {
     vibrate();
-    const data = { nombre, cliente, fecha, lineas, descripcion, iva: currentIva, total: totalConIva };
+    const data = { nombre, cliente, fecha, descripcion, iva: currentIva, precioBase: baseTotal, total: totalConIva };
     if (editId) {
       await updateDoc(doc(db, 'users', currentUser.uid, 'presupuestos', editId), data);
       showToast('Presupuesto actualizado ✓');
@@ -2257,52 +2226,46 @@ window.openPresupDetail = function(id) {
   if (!p) return;
   detailPresupId = id;
   const total = p.total !== undefined ? p.total : calcTotal(p.lineas || []);
-  const stateColor = { pendiente: 'var(--yellow)', aceptado: 'var(--green)', rechazado: 'var(--red)' };
-
-  let linesHtml = (p.lineas || []).map(l => `
-    <div class="presup-detail-line">
-      <span>${escHtml(l.desc)}</span>
-      <span>${l.qty}x ${formatEuro(l.price)} = <strong>${formatEuro(l.qty*l.price)}</strong></span>
-    </div>`).join('');
+  const base = p.precioBase !== undefined ? p.precioBase : calcTotal(p.lineas || []);
+  const stateLabel = p.cobrado ? 'Cobrado' : (p.estado ? p.estado.charAt(0).toUpperCase()+p.estado.slice(1) : 'Pendiente');
+  const stateColor = p.cobrado ? 'var(--green)' : { pendiente: 'var(--yellow)', aceptado: 'var(--green)', rechazado: 'var(--red)' }[p.estado] || 'var(--text2)';
 
   document.getElementById('presup-detail-inner').innerHTML = `
     <div class="modal-handle"></div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
       <span class="presup-num" style="font-size:0.8rem">PRES-${String(p.num||1).padStart(3,'0')} · ${p.fecha || 'Sin fecha'}</span>
-      <span class="presup-badge" style="background:rgba(0,0,0,0.1);color:${stateColor[p.estado]||'var(--text2)'}">
-        ${p.estado ? p.estado.charAt(0).toUpperCase()+p.estado.slice(1) : 'Pendiente'}
-      </span>
+      <span class="presup-badge" style="background:rgba(0,0,0,0.08);color:${stateColor}">${stateLabel}</span>
     </div>
     <div style="font-family:'Sora',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:4px">${escHtml(p.nombre)}</div>
-    <div style="color:var(--text2);font-size:0.85rem;margin-bottom:${p.descripcion?'10px':'20px'}"><i class="fas fa-user" style="margin-right:6px"></i>${escHtml(p.cliente||'')}</div>
-    ${p.descripcion ? `<div style="color:var(--text2);font-size:0.85rem;line-height:1.5;margin-bottom:20px;padding:10px 12px;background:var(--bg3);border-radius:8px">${escHtml(p.descripcion)}</div>` : ''}
-    <div>${linesHtml}</div>
+    <div style="color:var(--text2);font-size:0.85rem;margin-bottom:${p.descripcion?'12px':'20px'}"><i class="fas fa-user" style="margin-right:6px"></i>${escHtml(p.cliente||'')}</div>
+    ${p.descripcion ? `<div style="color:var(--text2);font-size:0.85rem;line-height:1.6;margin-bottom:20px;padding:12px 14px;background:var(--bg3);border-radius:10px;white-space:pre-wrap">${escHtml(p.descripcion)}</div>` : ''}
     ${p.iva > 0 ? `
     <div class="presup-detail-line" style="color:var(--text2);font-size:0.82rem">
-      <span>Base imponible</span><span>${formatEuro(calcTotal(p.lineas||[]))}</span>
+      <span>Base imponible</span><span>${formatEuro(base)}</span>
     </div>
     <div class="presup-detail-line" style="color:var(--text2);font-size:0.82rem">
-      <span>IVA ${p.iva}%</span><span>${formatEuro(calcTotal(p.lineas||[]) * p.iva / 100)}</span>
+      <span>IVA ${p.iva}%</span><span>${formatEuro(base * p.iva / 100)}</span>
     </div>` : ''}
     <div class="presup-total-row">
-      <span>TOTAL</span>
+      <span>TOTAL${p.iva > 0 ? ' (con IVA)' : ''}</span>
       <span style="color:var(--accent);font-size:1.2rem">${formatEuro(total)}</span>
     </div>
-    ${p.estado === 'aceptado' ? `
+    ${p.estado === 'aceptado' && !p.cobrado ? `
     <div style="margin-top:14px">
-      <button class="cobro-btn ${p.cobrado ? 'cobrado' : 'pendiente'}" onclick="toggleCobro('${id}')" style="width:100%;padding:10px">
-        <i class="fas fa-${p.cobrado ? 'check-circle' : 'clock'}"></i>
-        ${p.cobrado ? 'Cobrado ✓' : 'Pendiente de cobro'}
+      <button class="cobro-btn pendiente" onclick="marcarCobrado('${id}')" style="width:100%;padding:10px">
+        <i class="fas fa-coins"></i> Marcar como cobrado
       </button>
     </div>` : ''}
+    ${p.cobrado ? `<div style="margin-top:14px;text-align:center;font-size:0.85rem;color:var(--green);font-weight:600"><i class="fas fa-check-circle"></i> Cobrado</div>` : ''}
   `;
 
   const actions = document.getElementById('presup-detail-actions');
   actions.innerHTML = `
     <button class="btn-sec" onclick="editPresup('${id}')"><i class="fas fa-pen"></i> Editar</button>
-    <button class="btn-modal-save" onclick="printPresup('${id}')"><i class="fas fa-print"></i> Imprimir</button>
-    ${p.estado !== 'aceptado' ? `<button class="btn-sec" style="color:var(--green);border-color:rgba(34,197,94,0.3)" onclick="changePresupEstado('${id}','aceptado')"><i class="fas fa-thumbs-up"></i> Aceptar</button>` : ''}
-    ${p.estado !== 'rechazado' ? `<button class="btn-sec" style="color:var(--red);border-color:rgba(239,68,68,0.3)" onclick="changePresupEstado('${id}','rechazado')"><i class="fas fa-thumbs-down"></i> Rechazar</button>` : ''}
+    <button class="btn-modal-save" onclick="generarPDF('${id}')"><i class="fas fa-file-pdf"></i> PDF</button>
+    ${!p.cobrado && p.estado !== 'aceptado' ? `<button class="btn-sec" style="color:var(--green);border-color:rgba(34,197,94,0.3)" onclick="changePresupEstado('${id}','aceptado')"><i class="fas fa-thumbs-up"></i> Aceptar</button>` : ''}
+    ${p.estado !== 'rechazado' && !p.cobrado ? `<button class="btn-sec" style="color:var(--red);border-color:rgba(239,68,68,0.3)" onclick="changePresupEstado('${id}','rechazado')"><i class="fas fa-thumbs-down"></i> Rechazar</button>` : ''}
+    ${p.cobrado ? `<button class="btn-sec" style="color:var(--yellow);border-color:rgba(245,158,11,0.3)" onclick="restaurarACobrado('${id}')"><i class="fas fa-undo"></i> Restaurar</button>` : ''}
     <button class="btn-sec" style="color:var(--red);border-color:rgba(239,68,68,0.3)" onclick="eliminarPresup('${id}')"><i class="fas fa-trash"></i></button>
     <button class="btn-sec" onclick="closeModal('modal-presup-detail')">Cerrar</button>
   `;
@@ -2310,20 +2273,26 @@ window.openPresupDetail = function(id) {
   openModal('modal-presup-detail');
 };
 
+window.marcarCobrado = async function(id) {
+  const { doc, updateDoc } = window._fns;
+  await updateDoc(doc(window._db, 'users', currentUser.uid, 'presupuestos', id), { cobrado: true });
+  vibrate();
+  showToast('Marcado como cobrado ✓');
+  closeModal('modal-presup-detail');
+};
+
+window.restaurarACobrado = async function(id) {
+  const { doc, updateDoc } = window._fns;
+  await updateDoc(doc(window._db, 'users', currentUser.uid, 'presupuestos', id), { cobrado: false, estado: 'aceptado' });
+  vibrate();
+  showToast('Restaurado a aceptados');
+  closeModal('modal-presup-detail');
+};
+
 window.changePresupEstado = async function(id, estado) {
   const { doc, updateDoc } = window._fns;
   await updateDoc(doc(window._db, 'users', currentUser.uid, 'presupuestos', id), { estado });
   showToast(`Presupuesto marcado como ${estado}`);
-  closeModal('modal-presup-detail');
-};
-
-window.toggleCobro = async function(id) {
-  const p = allPresupuestos.find(x => x.id === id);
-  if (!p) return;
-  const { doc, updateDoc } = window._fns;
-  await updateDoc(doc(window._db, 'users', currentUser.uid, 'presupuestos', id), { cobrado: !p.cobrado });
-  vibrate();
-  showToast(!p.cobrado ? 'Marcado como cobrado ✓' : 'Marcado como pendiente');
   closeModal('modal-presup-detail');
 };
 
@@ -2336,25 +2305,24 @@ window.editPresup = function(id) {
   document.getElementById('presup-cliente').value = p.cliente || '';
   document.getElementById('presup-fecha').value = p.fecha || '';
   document.getElementById('presup-descripcion').value = p.descripcion || '';
-  presupLineCount = 0;
-  const cont = document.getElementById('presup-lines-container');
-  cont.innerHTML = '';
-  (p.lineas || []).forEach(l => {
-    presupLineCount++;
-    const id2 = presupLineCount;
-    const div = document.createElement('div');
-    div.className = 'presup-line-row';
-    div.id = `pline-${id2}`;
-    div.innerHTML = `
-      <input type="text" placeholder="Descripción" class="pline-desc" value="${escHtml(l.desc)}" oninput="updatePresupTotal()">
-      <input type="number" placeholder="Ud." class="pline-qty" style="flex:0.5;min-width:50px" value="${l.qty}" oninput="updatePresupTotal()">
-      <input type="number" placeholder="€" class="pline-price" style="flex:0.7;min-width:60px" step="0.01" value="${l.price}" oninput="updatePresupTotal()">
-      <button class="presup-line-remove" onclick="removeLine(${id2})"><i class="fas fa-times"></i></button>
-    `;
-    cont.appendChild(div);
+  // Precio base: puede venir de precioBase o de calcTotal de lineas antiguas
+  const base = p.precioBase !== undefined ? p.precioBase : calcTotal(p.lineas || []);
+  document.getElementById('presup-precio-base').value = base || '';
+  currentIva = p.iva || 0;
+  // Resetear botones IVA
+  document.querySelectorAll('.iva-btn').forEach(b => {
+    b.style.background = 'transparent';
+    b.style.borderColor = 'var(--border)';
+    b.style.color = 'var(--text2)';
   });
-  if (!p.lineas || p.lineas.length === 0) addPresupLine();
-  updatePresupTotal();
+  const ivaMap = {0:0,4:1,10:2,21:3};
+  const btns = document.querySelectorAll('.iva-btn');
+  if (btns[ivaMap[currentIva]]) {
+    btns[ivaMap[currentIva]].style.background = 'var(--accent)';
+    btns[ivaMap[currentIva]].style.borderColor = 'var(--accent)';
+    btns[ivaMap[currentIva]].style.color = '#fff';
+  }
+  updatePresupTotalSimple();
   openModal('modal-presup');
 };
 
@@ -2366,55 +2334,206 @@ window.eliminarPresup = async function(id) {
   showToast('Presupuesto eliminado');
 };
 
-window.printPresup = function(id) {
+// ─── RESTAURAR AVISO ───
+window.restaurarAviso = async function(id) {
+  const { doc, updateDoc } = window._fns;
+  await updateDoc(doc(window._db, 'users', currentUser.uid, 'avisos', id), { estado: 'pendiente' });
+  vibrate();
+  showToast('Aviso restaurado');
+};
+
+// ─── RESTAURAR PRESUP A PENDIENTE ───
+window.restaurarPresupAPendiente = async function(id) {
+  const { doc, updateDoc } = window._fns;
+  await updateDoc(doc(window._db, 'users', currentUser.uid, 'presupuestos', id), { estado: 'pendiente', cobrado: false });
+  vibrate();
+  showToast('Restaurado a pendientes');
+};
+
+// ─── PDF PROFESIONAL ───
+window.generarPDF = function(id) {
   const p = allPresupuestos.find(x => x.id === id);
   if (!p) return;
-  const baseTotal = calcTotal(p.lineas || []);
-  const total = p.total !== undefined ? p.total : baseTotal;
-  const ivaAmount = total - baseTotal;
+  const total = p.total !== undefined ? p.total : 0;
+  const base = p.precioBase !== undefined ? p.precioBase : calcTotal(p.lineas || []);
+  const ivaAmount = p.iva > 0 ? base * p.iva / 100 : 0;
+
+  // Obtener color accent del usuario
+  const accentMap = {
+    blue: '#2563eb', teal: '#0d9488', violet: '#7c3aed', rose: '#e11d48', amber: '#d97706'
+  };
+  const savedAccent = localStorage.getItem('rtm-accent') || 'blue';
+  const accentColor = accentMap[savedAccent] || '#2563eb';
+
   const w = window.open('', '_blank');
-  w.document.write(`
-    <html><head><title>Presupuesto ${p.num}</title>
-    <style>
-      body{font-family:Arial,sans-serif;padding:40px;max-width:700px;margin:0 auto}
-      h1{font-size:2rem;margin-bottom:4px}
-      .meta{color:#666;margin-bottom:30px}
-      table{width:100%;border-collapse:collapse;margin-bottom:20px}
-      th{background:#f5f5f5;padding:10px;text-align:left;font-size:0.85rem}
-      td{padding:10px;border-bottom:1px solid #eee}
-      .total-row{font-weight:700;font-size:1.1rem;background:#f9f9f9}
-      .iva-row{color:#666;font-size:0.9rem}
-      @media print{button{display:none}}
-    </style></head><body>
-    <h1>PRESUPUESTO</h1>
-    <div class="meta">
-      <strong>Nº:</strong> PRES-${String(p.num||1).padStart(3,'0')}<br>
-      <strong>Fecha:</strong> ${p.fecha || 'Sin fecha'}<br>
-      <strong>Cliente:</strong> ${escHtml(p.cliente||'')}<br>
-      <strong>Trabajo:</strong> ${escHtml(p.nombre||'')}
+  w.document.write(`<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Presupuesto PRES-${String(p.num||1).padStart(3,'0')}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Plus Jakarta Sans',Arial,sans-serif; background:#f8fafc; color:#1e293b; padding:0; }
+  .page { max-width:780px; margin:0 auto; background:#fff; min-height:100vh; position:relative; }
+  .header { background:${accentColor}; padding:40px 48px 36px; color:#fff; position:relative; overflow:hidden; }
+  .header::after { content:''; position:absolute; top:-60px; right:-60px; width:220px; height:220px; border-radius:50%; background:rgba(255,255,255,0.07); }
+  .header::before { content:''; position:absolute; bottom:-80px; right:80px; width:160px; height:160px; border-radius:50%; background:rgba(255,255,255,0.05); }
+  .header-top { display:flex; justify-content:space-between; align-items:flex-start; position:relative; z-index:1; }
+  .empresa-nombre { font-size:1.6rem; font-weight:700; letter-spacing:-0.5px; }
+  .presup-num-badge { background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.3); border-radius:8px; padding:6px 14px; font-size:0.82rem; font-weight:600; letter-spacing:0.5px; }
+  .header-title { font-size:2.6rem; font-weight:700; letter-spacing:-1px; margin-top:20px; position:relative; z-index:1; opacity:0.97; }
+  .body { padding:40px 48px; }
+  .meta-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:36px; }
+  .meta-block { }
+  .meta-label { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#94a3b8; margin-bottom:6px; }
+  .meta-value { font-size:0.95rem; font-weight:600; color:#1e293b; }
+  .meta-value.large { font-size:1.05rem; }
+  .divider { height:1px; background:#e2e8f0; margin-bottom:28px; }
+  .descripcion-box { background:#f8fafc; border-left:3px solid ${accentColor}; border-radius:0 8px 8px 0; padding:16px 20px; margin-bottom:32px; font-size:0.9rem; color:#475569; line-height:1.7; white-space:pre-wrap; }
+  .totales { margin-top:24px; }
+  .totales-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #f1f5f9; font-size:0.9rem; color:#64748b; }
+  .totales-row:last-child { border-bottom:none; }
+  .totales-final { display:flex; justify-content:space-between; align-items:center; background:${accentColor}; color:#fff; border-radius:12px; padding:18px 24px; margin-top:16px; }
+  .totales-final-label { font-size:1rem; font-weight:600; }
+  .totales-final-amount { font-size:1.8rem; font-weight:700; letter-spacing:-0.5px; }
+  .footer { border-top:1px solid #e2e8f0; padding:24px 48px; display:flex; justify-content:space-between; align-items:center; margin-top:40px; }
+  .footer-note { font-size:0.78rem; color:#94a3b8; }
+  .pdf-btn { position:fixed; bottom:24px; right:24px; background:${accentColor}; color:#fff; border:none; border-radius:50px; padding:14px 28px; font-size:0.95rem; font-weight:600; cursor:pointer; box-shadow:0 4px 20px rgba(0,0,0,0.2); display:flex; align-items:center; gap:8px; font-family:'Plus Jakarta Sans',sans-serif; z-index:999; }
+  .pdf-btn:hover { opacity:0.92; }
+  @media print {
+    body { background:#fff; }
+    .pdf-btn { display:none !important; }
+    .page { box-shadow:none; }
+  }
+</style>
+</head>
+<body>
+<button class="pdf-btn" onclick="window.print()">⬇ Guardar PDF</button>
+<div class="page">
+  <div class="header">
+    <div class="header-top">
+      <div class="empresa-nombre">RelajaTuMente</div>
+      <div class="presup-num-badge">PRES-${String(p.num||1).padStart(3,'0')}</div>
     </div>
-    <table>
-      <thead><tr><th>Descripción</th><th>Cantidad</th><th>Precio unit.</th><th>Total</th></tr></thead>
-      <tbody>
-        ${(p.lineas||[]).map(l=>`<tr><td>${escHtml(l.desc)}</td><td>${l.qty}</td><td>${formatEuro(l.price)}</td><td>${formatEuro(l.qty*l.price)}</td></tr>`).join('')}
-        ${p.iva > 0 ? `<tr class="iva-row"><td colspan="3">Base imponible</td><td>${formatEuro(baseTotal)}</td></tr>
-        <tr class="iva-row"><td colspan="3">IVA ${p.iva}%</td><td>${formatEuro(ivaAmount)}</td></tr>` : ''}
-        <tr class="total-row"><td colspan="3">TOTAL${p.iva > 0 ? ' (con IVA)' : ''}</td><td>${formatEuro(total)}</td></tr>
-      </tbody>
-    </table>
-    <button onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
-    </body></html>
-  `);
+    <div class="header-title">Presupuesto</div>
+  </div>
+  <div class="body">
+    <div class="meta-grid">
+      <div class="meta-block">
+        <div class="meta-label">Cliente</div>
+        <div class="meta-value large">${escHtml(p.cliente||'—')}</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Fecha</div>
+        <div class="meta-value">${p.fecha ? formatFecha(p.fecha) : 'Sin fecha'}</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Trabajo</div>
+        <div class="meta-value">${escHtml(p.nombre||'')}</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Estado</div>
+        <div class="meta-value" style="color:${accentColor}">${p.cobrado ? 'Cobrado' : (p.estado ? p.estado.charAt(0).toUpperCase()+p.estado.slice(1) : 'Pendiente')}</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    ${p.descripcion ? `
+    <div class="meta-label" style="margin-bottom:10px">Descripción del trabajo</div>
+    <div class="descripcion-box">${escHtml(p.descripcion)}</div>` : ''}
+    <div class="totales">
+      ${p.iva > 0 ? `
+      <div class="totales-row"><span>Base imponible</span><span style="font-weight:600;color:#1e293b;">${formatEuro(base)}</span></div>
+      <div class="totales-row"><span>IVA ${p.iva}%</span><span style="font-weight:600;color:#1e293b;">${formatEuro(ivaAmount)}</span></div>
+      ` : `<div class="totales-row"><span>Importe</span><span style="font-weight:600;color:#1e293b;">${formatEuro(base)}</span></div>`}
+      <div class="totales-final">
+        <div class="totales-final-label">TOTAL${p.iva > 0 ? ' (IVA incluido)' : ''}</div>
+        <div class="totales-final-amount">${formatEuro(total)}</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="footer-note">Presupuesto generado con RelajaTuMente</div>
+    <div class="footer-note">PRES-${String(p.num||1).padStart(3,'0')} · ${p.fecha || ''}</div>
+  </div>
+</div>
+</body></html>`);
   w.document.close();
 };
+
+// ─── SWIPE LISTENERS ───
+function attachSwipeListeners() {
+  document.querySelectorAll('.swipe-wrapper').forEach(wrapper => {
+    const inner = wrapper.querySelector('.swipe-card-inner');
+    const type = wrapper.dataset.type;
+    const id = wrapper.dataset.id;
+    if (!inner || !id) return;
+
+    let startX = 0, currentX = 0, isDragging = false;
+    const THRESHOLD = 90;
+
+    inner.addEventListener('touchstart', e => {
+      startX = e.touches[0].clientX;
+      isDragging = true;
+      inner.classList.add('swiping');
+    }, { passive: true });
+
+    inner.addEventListener('touchmove', e => {
+      if (!isDragging) return;
+      currentX = e.touches[0].clientX - startX;
+      // Solo derecha para aviso/presup-aceptar/presup-cobrar; solo izquierda para restore
+      const isRestore = type === 'aviso-completado' || type === 'presup-restore';
+      if (isRestore) {
+        if (currentX > 0) currentX = 0;
+      } else {
+        if (currentX < 0) currentX = 0;
+      }
+      inner.style.transform = `translateX(${currentX}px)`;
+      // Mostrar bg
+      const rightBg = wrapper.querySelector('.swipe-action-bg.right');
+      const leftBg = wrapper.querySelector('.swipe-action-bg.left');
+      if (rightBg) rightBg.style.opacity = Math.min(1, currentX / THRESHOLD);
+      if (leftBg) leftBg.style.opacity = Math.min(1, -currentX / THRESHOLD);
+    }, { passive: true });
+
+    inner.addEventListener('touchend', async () => {
+      if (!isDragging) return;
+      isDragging = false;
+      inner.classList.remove('swiping');
+
+      if (Math.abs(currentX) >= THRESHOLD) {
+        // Animar salida
+        inner.style.transform = `translateX(${currentX > 0 ? '110%' : '-110%'})`;
+        inner.style.transition = 'transform 0.3s ease';
+        setTimeout(async () => {
+          try {
+            if (type === 'aviso' && currentX > 0) await resolverAviso(id);
+            else if (type === 'aviso-completado' && currentX < 0) await restaurarAviso(id);
+            else if (type === 'presup-aceptar' && currentX > 0) await changePresupEstado(id, 'aceptado');
+            else if (type === 'presup-cobrar' && currentX > 0) await marcarCobrado(id);
+            else if (type === 'presup-restore' && currentX < 0) await restaurarPresupAPendiente(id);
+          } catch(e) { console.error('Swipe action error:', e); }
+        }, 250);
+      } else {
+        inner.style.transform = '';
+        const rightBg = wrapper.querySelector('.swipe-action-bg.right');
+        const leftBg = wrapper.querySelector('.swipe-action-bg.left');
+        if (rightBg) rightBg.style.opacity = 0;
+        if (leftBg) leftBg.style.opacity = 0;
+      }
+      currentX = 0;
+    });
+  });
+}
 
 // ─── COBROS BANNER ───
 function updateCobrosBanner() {
   const banner = document.getElementById('cobros-banner');
-  const aceptados = allPresupuestos.filter(p => p.estado === 'aceptado');
-  const pendienteCobro = aceptados.filter(p => !p.cobrado);
-  const totalPendiente = pendienteCobro.reduce((sum, p) => sum + (p.total !== undefined ? p.total : calcTotal(p.lineas||[])), 0);
-  if (aceptados.length === 0) { banner.style.display = 'none'; return; }
+  const aceptados = allPresupuestos.filter(p => p.estado === 'aceptado' && !p.cobrado);
+  const cobrados = allPresupuestos.filter(p => p.cobrado);
+  const totalPendiente = aceptados.reduce((sum, p) => sum + (p.total || 0), 0);
+  const totalCobrado = cobrados.reduce((sum, p) => sum + (p.total || 0), 0);
+  if (aceptados.length === 0 && cobrados.length === 0) { banner.style.display = 'none'; return; }
   banner.style.display = 'flex';
   banner.innerHTML = `
     <div>
@@ -2422,8 +2541,8 @@ function updateCobrosBanner() {
       <div class="cobros-banner-amount">${formatEuro(totalPendiente)}</div>
     </div>
     <div style="text-align:right">
-      <div class="cobros-banner-label">${pendienteCobro.length} trabajos</div>
-      <div style="color:rgba(255,255,255,0.8);font-size:0.8rem">${aceptados.length - pendienteCobro.length} cobrados</div>
+      <div class="cobros-banner-label">${aceptados.length} trabajo${aceptados.length!==1?'s':''}</div>
+      <div style="color:rgba(255,255,255,0.8);font-size:0.8rem">${cobrados.length} cobrado${cobrados.length!==1?'s':''} · ${formatEuro(totalCobrado)}</div>
     </div>
   `;
 }
