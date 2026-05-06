@@ -995,16 +995,136 @@ body {
   width: 100%;
 }
 
-/* ─── PRESUP LINES ─── */
-.presup-lines { margin-bottom: 12px; }
-.presup-line-row {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
-  align-items: center;
+/* ─── SEARCH BAR ─── */
+.search-bar-wrap {
+  position: relative;
+  margin-bottom: 14px;
 }
-.presup-line-row input { margin-bottom: 0; flex: 1; }
-.presup-line-row input:first-child { flex: 2; }
+.search-bar-icon {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text3);
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+.search-bar-input {
+  width: 100%;
+  padding: 11px 14px 11px 36px;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: var(--transition);
+}
+.search-bar-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+
+/* ─── SWIPE CARD WRAPPER ─── */
+.swipe-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  margin-bottom: 10px;
+}
+.swipe-action-bg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+.swipe-action-bg.right { background: var(--green); justify-content: flex-start; }
+.swipe-action-bg.left  { background: var(--yellow); justify-content: flex-end; }
+.swipe-card-inner {
+  position: relative;
+  z-index: 2;
+  touch-action: pan-y;
+  transition: transform 0.25s cubic-bezier(.4,0,.2,1);
+  will-change: transform;
+}
+.swipe-card-inner.swiping { transition: none; }
+
+/* ─── AVISO OVERDUE BANNER ─── */
+.avisos-overdue-section {
+  background: rgba(239,68,68,0.10);
+  border: 1.5px solid rgba(239,68,68,0.35);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  animation: slideUp 0.3s ease both;
+}
+.avisos-overdue-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--red);
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.avisos-today-section {
+  background: rgba(37,99,235,0.08);
+  border: 1.5px solid var(--accent-glow);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  animation: slideUp 0.3s ease both;
+}
+.avisos-today-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.overdue-close {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--red);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0 2px;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+.overdue-close:hover { opacity: 1; }
+
+/* ─── RESTORE SWIPE (completados / rechazados) ─── */
+.swipe-restore-bg { background: var(--yellow) !important; }
+
+/* ─── PRESUP LINE REMOVE (keep for edit compat) ─── */
+.presup-line-remove {
+  width: 32px; height: 32px; flex-shrink: 0;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text3);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition);
+  font-size: 0.8rem;
+}
+.presup-line-remove:hover { background: var(--red); color: #fff; border-color: var(--red); }
+
+/* ─── LOGIN LOADING ─── */
+.loading-screen {
 .presup-line-remove {
   width: 32px; height: 32px; flex-shrink: 0;
   border-radius: 8px;
@@ -1143,10 +1263,17 @@ body {
 
     <div class="chips">
       <button class="chip active" onclick="filterAvisos('pendiente', this)">Pendientes</button>
-      <button class="chip" onclick="filterAvisos('urgente', this)">Urgentes</button>
       <button class="chip" onclick="filterAvisos('sin-fecha', this)">Sin fecha</button>
       <button class="chip" onclick="filterAvisos('completados', this)">Completados</button>
     </div>
+
+    <div class="search-bar-wrap">
+      <i class="fas fa-search search-bar-icon"></i>
+      <input type="text" class="search-bar-input" id="avisos-search" placeholder="Buscar aviso..." oninput="renderAvisos()">
+    </div>
+
+    <div id="avisos-overdue-banner" style="display:none"></div>
+    <div id="avisos-today-banner" style="display:none"></div>
 
     <div class="avisos-list" id="avisos-list">
       <div class="empty-state"><i class="fas fa-inbox"></i><p>No hay avisos todavía.<br>Pulsa + para añadir uno.</p></div>
@@ -1187,10 +1314,15 @@ body {
     <div id="cobros-banner" style="display:none"></div>
 
     <div class="chips">
-      <button class="chip active" onclick="filterPresup('todos', this)">Todos</button>
-      <button class="chip" onclick="filterPresup('pendiente', this)">Pendientes</button>
+      <button class="chip active" onclick="filterPresup('pendiente', this)">Pendientes</button>
       <button class="chip" onclick="filterPresup('aceptado', this)">Aceptados</button>
       <button class="chip" onclick="filterPresup('rechazado', this)">Rechazados</button>
+      <button class="chip" onclick="filterPresup('cobrado', this)">Cobrados</button>
+    </div>
+
+    <div class="search-bar-wrap">
+      <i class="fas fa-search search-bar-icon"></i>
+      <input type="text" class="search-bar-input" id="presup-search" placeholder="Buscar presupuesto..." oninput="renderPresupuestos()">
     </div>
 
     <div id="presup-list">
@@ -1337,31 +1469,30 @@ body {
     <input type="date" id="presup-fecha">
 
     <span class="modal-label">Descripción general (opcional)</span>
-    <textarea id="presup-descripcion" rows="2" placeholder="Describe el trabajo a realizar..." style="margin-bottom:12px"></textarea>
+    <textarea id="presup-descripcion" rows="3" placeholder="Describe el trabajo a realizar..." style="margin-bottom:12px"></textarea>
 
-    <span class="modal-label">Líneas del presupuesto</span>
-    <div class="presup-lines" id="presup-lines-container"></div>
-    <button class="btn-add-line" onclick="addPresupLine()"><i class="fas fa-plus"></i> Añadir línea</button>
+    <span class="modal-label">Precio total (sin IVA)</span>
+    <input type="number" id="presup-precio-base" placeholder="0,00" step="0.01" min="0" oninput="updatePresupTotalSimple()">
 
-    <div class="presup-detail-line" style="border-top:1px solid var(--border);padding-top:14px">
-      <span style="font-weight:600">TOTAL</span>
-      <span style="font-size:1.2rem;font-weight:700;color:var(--accent)" id="presup-total-preview">0,00 €</span>
-    </div>
-
-    <div style="margin-top:10px;margin-bottom:4px">
+    <div style="margin-top:4px;margin-bottom:4px">
       <details style="background:var(--bg3);border-radius:var(--radius-sm);overflow:hidden">
         <summary style="padding:11px 14px;cursor:pointer;font-size:0.85rem;font-weight:600;color:var(--text2);list-style:none;display:flex;align-items:center;justify-content:space-between">
-          <span><i class="fas fa-percentage" style="margin-right:6px;color:var(--accent)"></i>Aplicar IVA al total</span>
+          <span><i class="fas fa-percentage" style="margin-right:6px;color:var(--accent)"></i>Aplicar IVA</span>
           <i class="fas fa-chevron-down" style="font-size:0.75rem;transition:transform 0.2s"></i>
         </summary>
         <div style="padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap">
-          <button type="button" class="iva-btn" onclick="applyIva(0)" style="flex:1;padding:8px;border:1.5px solid var(--border);border-radius:8px;background:transparent;color:var(--text2);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s">Sin IVA</button>
+          <button type="button" class="iva-btn" onclick="applyIva(0)" style="flex:1;padding:8px;border:1.5px solid var(--border);border-radius:8px;background:var(--accent);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s">Sin IVA</button>
           <button type="button" class="iva-btn" onclick="applyIva(4)" style="flex:1;padding:8px;border:1.5px solid var(--border);border-radius:8px;background:transparent;color:var(--text2);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s">4%</button>
           <button type="button" class="iva-btn" onclick="applyIva(10)" style="flex:1;padding:8px;border:1.5px solid var(--border);border-radius:8px;background:transparent;color:var(--text2);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s">10%</button>
           <button type="button" class="iva-btn" onclick="applyIva(21)" style="flex:1;padding:8px;border:1.5px solid var(--border);border-radius:8px;background:transparent;color:var(--text2);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s">21%</button>
         </div>
         <div style="padding:0 14px 12px;font-size:0.8rem;color:var(--text3)" id="iva-info-text"></div>
       </details>
+    </div>
+
+    <div class="presup-detail-line" style="border-top:1px solid var(--border);padding-top:14px;margin-top:8px">
+      <span style="font-weight:600">TOTAL</span>
+      <span style="font-size:1.2rem;font-weight:700;color:var(--accent)" id="presup-total-preview">0,00 €</span>
     </div>
 
     <div class="modal-actions">
@@ -1674,51 +1805,131 @@ function loadAvisos() {
 function renderAvisos(filter) {
   if (!filter) filter = currentAvisoFilter;
   const list = document.getElementById('avisos-list');
+  const searchQ = (document.getElementById('avisos-search')?.value || '').toLowerCase().trim();
+
+  const today = new Date().toISOString().slice(0,10);
 
   let data;
   if (filter === 'completados') {
     data = allAvisos.filter(a => a.estado === 'resuelto');
   } else {
     data = allAvisos.filter(a => a.estado !== 'resuelto');
-    if (filter === 'pendiente') data = data.filter(a => a.estado !== 'resuelto');
-    if (filter === 'urgente') data = data.filter(a => a.color === 'red');
     if (filter === 'sin-fecha') data = data.filter(a => !a.fecha);
   }
 
-  // Sort: with date first (by date), then no-date
-  const withDate = data.filter(a => a.fecha).sort((a,b) => a.fecha.localeCompare(b.fecha));
-  const noDate = data.filter(a => !a.fecha);
-  data = [...withDate, ...noDate];
+  // Apply search
+  if (searchQ) {
+    data = data.filter(a => a.desc.toLowerCase().includes(searchQ));
+  }
 
   const total = allAvisos.filter(a => a.estado !== 'resuelto').length;
   document.getElementById('avisos-count').textContent = total === 0 ? 'Sin avisos pendientes' : `${total} pendiente${total > 1 ? 's' : ''}`;
 
-  if (data.length === 0) {
+  // ─── OVERDUE & TODAY BANNERS (solo en pendientes) ───
+  const overdueBanner = document.getElementById('avisos-overdue-banner');
+  const todayBanner = document.getElementById('avisos-today-banner');
+  overdueBanner.style.display = 'none';
+  todayBanner.style.display = 'none';
+
+  if (filter === 'pendiente' && !searchQ) {
+    const overdue = allAvisos.filter(a => a.estado !== 'resuelto' && a.fecha && a.fecha < today);
+    const todayAvisos = allAvisos.filter(a => a.estado !== 'resuelto' && a.fecha === today);
+
+    if (overdue.length > 0) {
+      overdueBanner.style.display = 'block';
+      overdueBanner.innerHTML = `
+        <div class="avisos-overdue-section">
+          <div class="avisos-overdue-label">
+            <i class="fas fa-exclamation-circle"></i> Fecha vencida — ${overdue.length} aviso${overdue.length>1?'s':''}
+            <button class="overdue-close" onclick="document.getElementById('avisos-overdue-banner').style.display='none'" title="Cerrar"><i class="fas fa-times"></i></button>
+          </div>
+          ${overdue.map(a => buildAvisoCardHTML(a, true)).join('')}
+        </div>`;
+    }
+
+    if (todayAvisos.length > 0) {
+      todayBanner.style.display = 'block';
+      todayBanner.innerHTML = `
+        <div class="avisos-today-section">
+          <div class="avisos-today-label"><i class="fas fa-calendar-day"></i> Para hoy — ${todayAvisos.length} aviso${todayAvisos.length>1?'s':''}</div>
+          ${todayAvisos.map(a => buildAvisoCardHTML(a, false)).join('')}
+        </div>`;
+    }
+
+    // Remove overdue + today from main list
+    const overdueIds = new Set(overdue.map(a=>a.id));
+    const todayIds = new Set(todayAvisos.map(a=>a.id));
+    data = data.filter(a => !overdueIds.has(a.id) && !todayIds.has(a.id));
+  }
+
+  // Sort: urgentes (red) primero, luego por fecha
+  if (filter !== 'completados') {
+    const urgent = data.filter(a => a.color === 'red');
+    const nonUrgent = data.filter(a => a.color !== 'red');
+    const sortByDate = arr => {
+      const withDate = arr.filter(a => a.fecha).sort((a,b) => a.fecha.localeCompare(b.fecha));
+      const noDate = arr.filter(a => !a.fecha);
+      return [...withDate, ...noDate];
+    };
+    data = [...sortByDate(urgent), ...sortByDate(nonUrgent)];
+  }
+
+  if (data.length === 0 && overdueBanner.style.display === 'none' && todayBanner.style.display === 'none') {
     list.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><p>No hay avisos aquí.</p></div>`;
     return;
   }
 
+  const isCompletados = filter === 'completados';
+  list.innerHTML = data.map(a => buildAvisoCardHTML(a, false, isCompletados)).join('');
+  attachSwipeListeners();
+}
+
+function buildAvisoCardHTML(a, isOverdue, isCompletados) {
   const colorMap = { red: '#ef4444', green: '#22c55e', yellow: '#f59e0b', accent: 'var(--accent)' };
   const today = new Date().toISOString().slice(0,10);
+  const c = colorMap[a.color] || colorMap.green;
+  const isHoy = a.fecha === today;
+  const fechaLabel = a.fecha ? (isHoy ? '📅 Hoy' : `📅 ${formatFecha(a.fecha)}`) : '📌 Sin fecha';
+  const overdueStyle = isOverdue ? 'border-left:3px solid var(--red);' : '';
 
-  list.innerHTML = data.map(a => {
-    const c = colorMap[a.color] || colorMap.green;
-    const isHoy = a.fecha === today;
-    const fechaLabel = a.fecha ? (isHoy ? '📅 Hoy' : `📅 ${formatFecha(a.fecha)}`) : '📌 Sin fecha';
+  if (isCompletados) {
     return `
-    <div class="aviso-card" onclick="openAvisoDetail('${a.id}')">
-      <div class="aviso-color-dot" style="color:${c};background:${c}"></div>
-      <div class="aviso-info">
-        <div class="aviso-nombre">${escHtml(a.desc.split('\n')[0].substring(0,60))}</div>
-        <div class="aviso-meta">${fechaLabel}</div>
-      </div>
-      <div class="aviso-actions" onclick="event.stopPropagation()">
-        <button class="action-btn" onclick="editAviso('${a.id}')" title="Editar"><i class="fas fa-pen"></i></button>
-        <button class="action-btn done" onclick="resolverAviso('${a.id}')" title="Resolver"><i class="fas fa-check"></i></button>
-        <button class="action-btn del" onclick="eliminarAviso('${a.id}')" title="Eliminar"><i class="fas fa-trash"></i></button>
+    <div class="swipe-wrapper" data-id="${a.id}" data-type="aviso-completado">
+      <div class="swipe-action-bg left swipe-restore-bg"><i class="fas fa-undo" style="margin-right:6px"></i> Restaurar</div>
+      <div class="swipe-card-inner">
+        <div class="aviso-card" style="${overdueStyle}" onclick="openAvisoDetail('${a.id}')">
+          <div class="aviso-color-dot" style="color:${c};background:${c}"></div>
+          <div class="aviso-info">
+            <div class="aviso-nombre">${escHtml(a.desc.split('\n')[0].substring(0,60))}</div>
+            <div class="aviso-meta">${fechaLabel}</div>
+          </div>
+          <div class="aviso-actions" onclick="event.stopPropagation()">
+            <button class="action-btn done" onclick="restaurarAviso('${a.id}')" title="Restaurar"><i class="fas fa-undo"></i></button>
+            <button class="action-btn del" onclick="eliminarAviso('${a.id}')" title="Eliminar"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
       </div>
     </div>`;
-  }).join('');
+  }
+
+  return `
+  <div class="swipe-wrapper" data-id="${a.id}" data-type="aviso">
+    <div class="swipe-action-bg right"><i class="fas fa-check" style="margin-right:6px"></i> Resolver</div>
+    <div class="swipe-card-inner">
+      <div class="aviso-card" style="${overdueStyle}" onclick="openAvisoDetail('${a.id}')">
+        <div class="aviso-color-dot" style="color:${c};background:${c}"></div>
+        <div class="aviso-info">
+          <div class="aviso-nombre">${escHtml(a.desc.split('\n')[0].substring(0,60))}</div>
+          <div class="aviso-meta">${fechaLabel}${isOverdue ? ' <span style="color:var(--red);font-weight:600;margin-left:4px">· Vencido</span>' : ''}</div>
+        </div>
+        <div class="aviso-actions" onclick="event.stopPropagation()">
+          <button class="action-btn" onclick="editAviso('${a.id}')" title="Editar"><i class="fas fa-pen"></i></button>
+          <button class="action-btn done" onclick="resolverAviso('${a.id}')" title="Resolver"><i class="fas fa-check"></i></button>
+          <button class="action-btn del" onclick="eliminarAviso('${a.id}')" title="Eliminar"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>`;
 }
 
 window.filterAvisos = function(f, btn) {
@@ -1830,8 +2041,26 @@ function loadPresupuestos() {
 function renderPresupuestos(filter) {
   if (!filter) filter = currentPresupFilter;
   const list = document.getElementById('presup-list');
+  const searchQ = (document.getElementById('presup-search')?.value || '').toLowerCase().trim();
+
   let data = allPresupuestos;
-  if (filter !== 'todos') data = data.filter(p => p.estado === filter);
+
+  if (filter === 'cobrado') {
+    data = data.filter(p => p.cobrado === true);
+  } else if (filter === 'pendiente') {
+    data = data.filter(p => p.estado === 'pendiente');
+  } else if (filter === 'aceptado') {
+    data = data.filter(p => p.estado === 'aceptado' && !p.cobrado);
+  } else if (filter === 'rechazado') {
+    data = data.filter(p => p.estado === 'rechazado');
+  }
+
+  if (searchQ) {
+    data = data.filter(p =>
+      (p.nombre||'').toLowerCase().includes(searchQ) ||
+      (p.cliente||'').toLowerCase().includes(searchQ)
+    );
+  }
 
   if (data.length === 0) {
     list.innerHTML = `<div class="empty-state"><i class="fas fa-file-invoice"></i><p>No hay presupuestos aquí.</p></div>`;
@@ -1841,21 +2070,69 @@ function renderPresupuestos(filter) {
   const stateColor = { pendiente: 'var(--yellow)', aceptado: 'var(--green)', rechazado: 'var(--red)' };
   const stateBg = { pendiente: 'rgba(245,158,11,0.12)', aceptado: 'rgba(34,197,94,0.12)', rechazado: 'rgba(239,68,68,0.12)' };
 
+  const isRestoreable = filter === 'rechazado' || filter === 'cobrado';
+
   list.innerHTML = data.map(p => {
-    const total = p.total !== undefined ? p.total : calcTotal(p.lineas || []);
+    const total = p.total !== undefined ? p.total : 0;
+    const badgeLabel = p.cobrado ? 'Cobrado' : (p.estado ? p.estado.charAt(0).toUpperCase()+p.estado.slice(1) : 'Pendiente');
+    const badgeColor = p.cobrado ? 'var(--green)' : (stateColor[p.estado] || 'var(--text2)');
+    const badgeBg = p.cobrado ? 'rgba(34,197,94,0.12)' : (stateBg[p.estado] || 'transparent');
+
+    if (isRestoreable) {
+      return `
+      <div class="swipe-wrapper" data-id="${p.id}" data-type="presup-restore">
+        <div class="swipe-action-bg left swipe-restore-bg"><i class="fas fa-undo" style="margin-right:6px"></i> Restaurar a pendiente</div>
+        <div class="swipe-card-inner">
+          <div class="presup-card" onclick="openPresupDetail('${p.id}')">
+            <div class="presup-top">
+              <span class="presup-num">PRES-${String(p.num||1).padStart(3,'0')}</span>
+              <span class="presup-badge" style="background:${badgeBg};color:${badgeColor}">${badgeLabel}</span>
+            </div>
+            <div class="presup-nombre">${escHtml(p.nombre||'')}</div>
+            <div class="presup-cliente"><i class="fas fa-user" style="font-size:0.7rem;margin-right:4px"></i>${escHtml(p.cliente||'')}</div>
+            <div class="presup-total">${formatEuro(total)}</div>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    if (filter === 'aceptado') {
+      return `
+      <div class="swipe-wrapper" data-id="${p.id}" data-type="presup-cobrar">
+        <div class="swipe-action-bg right" style="background:var(--green)"><i class="fas fa-coins" style="margin-right:6px"></i> Marcar cobrado</div>
+        <div class="swipe-card-inner">
+          <div class="presup-card" onclick="openPresupDetail('${p.id}')">
+            <div class="presup-top">
+              <span class="presup-num">PRES-${String(p.num||1).padStart(3,'0')}</span>
+              <span class="presup-badge" style="background:${badgeBg};color:${badgeColor}">${badgeLabel}</span>
+            </div>
+            <div class="presup-nombre">${escHtml(p.nombre||'')}</div>
+            <div class="presup-cliente"><i class="fas fa-user" style="font-size:0.7rem;margin-right:4px"></i>${escHtml(p.cliente||'')}</div>
+            <div class="presup-total">${formatEuro(total)}</div>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    // Pendientes: swipe derecha = aceptar
     return `
-    <div class="presup-card" onclick="openPresupDetail('${p.id}')">
-      <div class="presup-top">
-        <span class="presup-num">PRES-${String(p.num || 1).padStart(3,'0')}</span>
-        <span class="presup-badge" style="background:${stateBg[p.estado]||'transparent'};color:${stateColor[p.estado]||'var(--text2)'}">
-          ${p.estado ? p.estado.charAt(0).toUpperCase()+p.estado.slice(1) : 'Pendiente'}
-        </span>
+    <div class="swipe-wrapper" data-id="${p.id}" data-type="presup-aceptar">
+      <div class="swipe-action-bg right" style="background:var(--green)"><i class="fas fa-thumbs-up" style="margin-right:6px"></i> Aceptar</div>
+      <div class="swipe-card-inner">
+        <div class="presup-card" onclick="openPresupDetail('${p.id}')">
+          <div class="presup-top">
+            <span class="presup-num">PRES-${String(p.num||1).padStart(3,'0')}</span>
+            <span class="presup-badge" style="background:${badgeBg};color:${badgeColor}">${badgeLabel}</span>
+          </div>
+          <div class="presup-nombre">${escHtml(p.nombre||'')}</div>
+          <div class="presup-cliente"><i class="fas fa-user" style="font-size:0.7rem;margin-right:4px"></i>${escHtml(p.cliente||'')}</div>
+          <div class="presup-total">${formatEuro(total)}</div>
+        </div>
       </div>
-      <div class="presup-nombre">${escHtml(p.nombre || '')}</div>
-      <div class="presup-cliente"><i class="fas fa-user" style="font-size:0.7rem;margin-right:4px"></i>${escHtml(p.cliente || '')}</div>
-      <div class="presup-total">${formatEuro(total)}</div>
     </div>`;
   }).join('');
+
+  attachSwipeListeners();
 }
 
 window.filterPresup = function(f, btn) {
