@@ -9,6 +9,13 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="RelajaTuMente">
+<meta name="application-name" content="RelajaTuMente">
+<meta name="description" content="Organiza tu día, vacía tu mente">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -1504,6 +1511,21 @@ function showApp(user) {
   loadAvisos();
   loadPresupuestos();
   renderCalendar();
+
+  // Test de escritura Firebase al arrancar
+  (async () => {
+    try {
+      const { collection, addDoc, doc, deleteDoc, serverTimestamp } = window._fns;
+      const testRef = await addDoc(collection(window._db, 'users', currentUser.uid, '_test'), { t: serverTimestamp() });
+      await deleteDoc(doc(window._db, 'users', currentUser.uid, '_test', testRef.id));
+      console.log('✅ Firebase escritura OK');
+    } catch(e) {
+      console.error('❌ Firebase escritura FALLA:', e.code, e.message);
+      if (e.code === 'permission-denied') {
+        showToast('⚠️ Firebase: sin permisos de escritura. Revisa las reglas de Firestore.', 8000);
+      }
+    }
+  })();
 }
 
 // ─── AUTH ACTIONS ───
@@ -1729,7 +1751,10 @@ window.saveAviso = async function() {
     closeModal('modal-aviso');
   } catch(e) {
     console.error('Error guardando aviso:', e);
-    showToast('Error al guardar. Inténtalo de nuevo.');
+    const msg = e.code === 'permission-denied' ? 'Sin permisos en Firebase. Revisa las reglas.' :
+                e.code === 'unavailable' ? 'Sin conexión con Firebase.' :
+                `Error: ${e.code || e.message}`;
+    showToast(msg, 6000);
   }
 };
 
@@ -1942,7 +1967,10 @@ window.savePresup = async function() {
     closeModal('modal-presup');
   } catch(e) {
     console.error('Error guardando presupuesto:', e);
-    showToast('Error al guardar. Inténtalo de nuevo.');
+    const msg = e.code === 'permission-denied' ? 'Sin permisos en Firebase. Revisa las reglas.' :
+                e.code === 'unavailable' ? 'Sin conexión con Firebase.' :
+                `Error: ${e.code || e.message}`;
+    showToast(msg, 6000);
   }
 };
 
@@ -2240,11 +2268,11 @@ function vibrate() {
   if (vibOn && navigator.vibrate) navigator.vibrate(30);
 }
 
-function showToast(msg) {
+function showToast(msg, duration) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+  setTimeout(() => t.classList.remove('show'), duration || 2500);
 }
 
 function formatEuro(n) {
