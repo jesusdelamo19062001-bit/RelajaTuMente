@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>RelajaTuMente</title>
+<meta name="theme-color" content="#f4f6fb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -1024,7 +1029,7 @@ body {
   position: fixed;
   inset: 0;
   background: var(--bg);
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -1416,17 +1421,21 @@ window._provider = provider;
 window._fns = { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, signOut, updateProfile, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, orderBy, onSnapshot, serverTimestamp };
 
 // ─── AUTH STATE ───
-onAuthStateChanged(auth, user => {
-  document.getElementById('loading-screen').style.opacity = '0';
-  setTimeout(() => document.getElementById('loading-screen').style.display = 'none', 400);
-
-  if (user) {
-    showApp(user);
-  } else {
-    document.getElementById('auth-screen').style.display = 'flex';
-    document.getElementById('app-screen').style.display = 'none';
-  }
-});
+window._onAuthReady = function(onAuthStateChangedFn) {
+  onAuthStateChangedFn(auth, user => {
+    document.getElementById('loading-screen').style.opacity = '0';
+    setTimeout(() => document.getElementById('loading-screen').style.display = 'none', 400);
+    if (user) {
+      window._pendingUser = user;
+      if (typeof showApp === 'function') showApp(user);
+      else window._pendingAuth = user;
+    } else {
+      document.getElementById('auth-screen').style.display = 'flex';
+      document.getElementById('app-screen').style.display = 'none';
+    }
+  });
+};
+window._fns._onAuthStateChanged = onAuthStateChanged;
 </script>
 
 <script>
@@ -2275,6 +2284,28 @@ window.addEventListener('load', () => {
 
 // Init light theme by default
 document.documentElement.setAttribute('data-theme', 'light');
+
+// Mostrar pantalla de carga al arrancar
+document.getElementById('loading-screen').style.display = 'flex';
+
+// ─── START AUTH LISTENER ───
+// Wait for module to expose _fns, then attach auth state
+(function waitForFirebase() {
+  if (window._fns && window._fns._onAuthStateChanged && window._auth) {
+    window._fns._onAuthStateChanged(window._auth, user => {
+      document.getElementById('loading-screen').style.opacity = '0';
+      setTimeout(() => document.getElementById('loading-screen').style.display = 'none', 400);
+      if (user) {
+        showApp(user);
+      } else {
+        document.getElementById('auth-screen').style.display = 'flex';
+        document.getElementById('app-screen').style.display = 'none';
+      }
+    });
+  } else {
+    setTimeout(waitForFirebase, 30);
+  }
+})();
 </script>
 </body>
 </html>
