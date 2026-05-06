@@ -551,6 +551,7 @@ body {
   max-width: 600px;
   transform: translateY(100%);
   transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+  pointer-events: all;
 }
 
 .modal-overlay.open .modal { transform: translateY(0); }
@@ -692,6 +693,7 @@ body {
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: -0.2px;
+}
 
 .cal-grid {
   display: grid;
@@ -1311,8 +1313,8 @@ body {
 </div>
 
 <!-- MODAL NUEVO PRESUPUESTO -->
-<div class="modal-overlay" id="modal-presup" style="align-items:flex-start;padding-top:20px;overflow-y:auto">
-  <div class="modal" style="border-radius:24px;max-height:90vh;overflow-y:auto">
+<div class="modal-overlay" id="modal-presup">
+  <div class="modal" style="border-radius:24px;max-height:85vh;overflow-y:auto">
     <div class="modal-handle"></div>
     <div class="modal-title">Nuevo presupuesto</div>
 
@@ -1379,8 +1381,8 @@ body {
 </div>
 
 <!-- MODAL DETALLE PRESUPUESTO -->
-<div class="modal-overlay" id="modal-presup-detail" style="align-items:flex-start;padding-top:20px;overflow-y:auto">
-  <div class="modal" style="border-radius:24px;max-height:90vh;overflow-y:auto">
+<div class="modal-overlay" id="modal-presup-detail">
+  <div class="modal" style="border-radius:24px;max-height:85vh;overflow-y:auto">
     <div class="modal-handle"></div>
     <div id="presup-detail-inner"></div>
     <div class="detail-actions" id="presup-detail-actions"></div>
@@ -1641,6 +1643,9 @@ function loadAvisos() {
     allAvisos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderAvisos();
     renderCalendar();
+  }, err => {
+    console.error('Error cargando avisos:', err);
+    showToast('Error al cargar avisos');
   });
 }
 
@@ -1791,6 +1796,9 @@ function loadPresupuestos() {
     allPresupuestos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderPresupuestos();
     updateCobrosBanner();
+  }, err => {
+    console.error('Error cargando presupuestos:', err);
+    showToast('Error al cargar presupuestos');
   });
 }
 
@@ -1809,7 +1817,7 @@ function renderPresupuestos(filter) {
   const stateBg = { pendiente: 'rgba(245,158,11,0.12)', aceptado: 'rgba(34,197,94,0.12)', rechazado: 'rgba(239,68,68,0.12)' };
 
   list.innerHTML = data.map(p => {
-    const total = calcTotal(p.lineas || []);
+    const total = p.total !== undefined ? p.total : calcTotal(p.lineas || []);
     return `
     <div class="presup-card" onclick="openPresupDetail('${p.id}')">
       <div class="presup-top">
@@ -1913,17 +1921,21 @@ window.savePresup = async function() {
   if (!nombre) return showToast('Escribe un nombre para el presupuesto');
   if (!currentUser) return showToast('Error: no hay sesión activa');
   const lineas = getPresupLines();
+  const baseTotal = calcTotal(lineas);
+  const ivaAmount = baseTotal * (currentIva / 100);
+  const totalConIva = baseTotal + ivaAmount;
   const { collection, addDoc, doc, updateDoc, serverTimestamp } = window._fns;
   const db = window._db;
   try {
     vibrate();
+    const data = { nombre, cliente, fecha, lineas, descripcion, iva: currentIva, total: totalConIva };
     if (editId) {
-      await updateDoc(doc(db, 'users', currentUser.uid, 'presupuestos', editId), { nombre, cliente, fecha, lineas, descripcion });
+      await updateDoc(doc(db, 'users', currentUser.uid, 'presupuestos', editId), data);
       showToast('Presupuesto actualizado ✓');
     } else {
       const num = allPresupuestos.length + 1;
       await addDoc(collection(db, 'users', currentUser.uid, 'presupuestos'), {
-        nombre, cliente, fecha, lineas, descripcion, estado: 'pendiente', cobrado: false, num, createdAt: serverTimestamp()
+        ...data, estado: 'pendiente', cobrado: false, num, createdAt: serverTimestamp()
       });
       showToast('Presupuesto guardado ✓');
     }
@@ -1939,7 +1951,7 @@ window.openPresupDetail = function(id) {
   const p = allPresupuestos.find(x => x.id === id);
   if (!p) return;
   detailPresupId = id;
-  const total = calcTotal(p.lineas || []);
+  const total = p.total !== undefined ? p.total : calcTotal(p.lineas || []);
   const stateColor = { pendiente: 'var(--yellow)', aceptado: 'var(--green)', rechazado: 'var(--red)' };
 
   let linesHtml = (p.lineas || []).map(l => `
@@ -1960,6 +1972,13 @@ window.openPresupDetail = function(id) {
     <div style="color:var(--text2);font-size:0.85rem;margin-bottom:${p.descripcion?'10px':'20px'}"><i class="fas fa-user" style="margin-right:6px"></i>${escHtml(p.cliente||'')}</div>
     ${p.descripcion ? `<div style="color:var(--text2);font-size:0.85rem;line-height:1.5;margin-bottom:20px;padding:10px 12px;background:var(--bg3);border-radius:8px">${escHtml(p.descripcion)}</div>` : ''}
     <div>${linesHtml}</div>
+    ${p.iva > 0 ? `
+    <div class="presup-detail-line" style="color:var(--text2);font-size:0.82rem">
+      <span>Base imponible</span><span>${formatEuro(calcTotal(p.lineas||[]))}</span>
+    </div>
+    <div class="presup-detail-line" style="color:var(--text2);font-size:0.82rem">
+      <span>IVA ${p.iva}%</span><span>${formatEuro(calcTotal(p.lineas||[]) * p.iva / 100)}</span>
+    </div>` : ''}
     <div class="presup-total-row">
       <span>TOTAL</span>
       <span style="color:var(--accent);font-size:1.2rem">${formatEuro(total)}</span>
@@ -2045,7 +2064,9 @@ window.eliminarPresup = async function(id) {
 window.printPresup = function(id) {
   const p = allPresupuestos.find(x => x.id === id);
   if (!p) return;
-  const total = calcTotal(p.lineas || []);
+  const baseTotal = calcTotal(p.lineas || []);
+  const total = p.total !== undefined ? p.total : baseTotal;
+  const ivaAmount = total - baseTotal;
   const w = window.open('', '_blank');
   w.document.write(`
     <html><head><title>Presupuesto ${p.num}</title>
@@ -2057,6 +2078,7 @@ window.printPresup = function(id) {
       th{background:#f5f5f5;padding:10px;text-align:left;font-size:0.85rem}
       td{padding:10px;border-bottom:1px solid #eee}
       .total-row{font-weight:700;font-size:1.1rem;background:#f9f9f9}
+      .iva-row{color:#666;font-size:0.9rem}
       @media print{button{display:none}}
     </style></head><body>
     <h1>PRESUPUESTO</h1>
@@ -2070,7 +2092,9 @@ window.printPresup = function(id) {
       <thead><tr><th>Descripción</th><th>Cantidad</th><th>Precio unit.</th><th>Total</th></tr></thead>
       <tbody>
         ${(p.lineas||[]).map(l=>`<tr><td>${escHtml(l.desc)}</td><td>${l.qty}</td><td>${formatEuro(l.price)}</td><td>${formatEuro(l.qty*l.price)}</td></tr>`).join('')}
-        <tr class="total-row"><td colspan="3">TOTAL</td><td>${formatEuro(total)}</td></tr>
+        ${p.iva > 0 ? `<tr class="iva-row"><td colspan="3">Base imponible</td><td>${formatEuro(baseTotal)}</td></tr>
+        <tr class="iva-row"><td colspan="3">IVA ${p.iva}%</td><td>${formatEuro(ivaAmount)}</td></tr>` : ''}
+        <tr class="total-row"><td colspan="3">TOTAL${p.iva > 0 ? ' (con IVA)' : ''}</td><td>${formatEuro(total)}</td></tr>
       </tbody>
     </table>
     <button onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
@@ -2084,7 +2108,7 @@ function updateCobrosBanner() {
   const banner = document.getElementById('cobros-banner');
   const aceptados = allPresupuestos.filter(p => p.estado === 'aceptado');
   const pendienteCobro = aceptados.filter(p => !p.cobrado);
-  const totalPendiente = pendienteCobro.reduce((sum, p) => sum + calcTotal(p.lineas||[]), 0);
+  const totalPendiente = pendienteCobro.reduce((sum, p) => sum + (p.total !== undefined ? p.total : calcTotal(p.lineas||[])), 0);
   if (aceptados.length === 0) { banner.style.display = 'none'; return; }
   banner.style.display = 'flex';
   banner.innerHTML = `
@@ -2209,26 +2233,6 @@ window.toggleVib = function() {
   document.getElementById('vib-toggle').classList.toggle('on', vibOn);
   localStorage.setItem('rtm-vib', vibOn);
   if (vibOn) vibrate();
-};
-
-window.uploadAvatar = async function(input) {
-  const file = input.files[0];
-  if (!file) return;
-  showToast('Subiendo foto...');
-  const { ref, uploadBytes, getDownloadURL } = window;
-  const storageRef = window._fns ? window._storage : null;
-  // Use Firebase storage
-  try {
-    const sRef = ref(window._storage, `avatars/${currentUser.uid}`);
-    await uploadBytes(sRef, file);
-    const url = await getDownloadURL(sRef);
-    await window._fns.updateProfile(currentUser, { photoURL: url });
-    document.getElementById('profile-avatar-big').innerHTML = `<img src="${url}">`;
-    document.getElementById('avatar-initials').innerHTML = `<img src="${url}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`;
-    showToast('Foto actualizada ✓');
-  } catch(e) {
-    showToast('Error al subir la foto');
-  }
 };
 
 // ─── UTILS ───
