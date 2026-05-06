@@ -12,10 +12,10 @@
 <meta name="apple-mobile-web-app-title" content="RelajaTuMente">
 <meta name="application-name" content="RelajaTuMente">
 <meta name="description" content="Organiza tu día, vacía tu mente">
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png">
-<link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="manifest" href="/RelajaTuMente/manifest.json">
+<link rel="apple-touch-icon" sizes="192x192" href="/RelajaTuMente/icon-192.png">
+<link rel="apple-touch-icon" sizes="512x512" href="/RelajaTuMente/icon-512.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/RelajaTuMente/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -2338,6 +2338,16 @@ document.getElementById('loading-screen').style.display = 'flex';
     setTimeout(waitForFirebase, 30);
   }
 })();
+</script>
+<!-- SERVICE WORKER (PWA install) -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/RelajaTuMente/sw.js')
+      .then(r => console.log('SW registrado:', r.scope))
+      .catch(e => console.error('SW error:', e));
+  });
+}
 </script>
 </body>
 </html>
