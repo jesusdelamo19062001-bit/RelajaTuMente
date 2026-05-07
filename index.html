@@ -20,67 +20,105 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+ 
 <style>
 :root {
-  --accent: #2563eb;
-  --accent2: #1d4ed8;
-  --accent-glow: rgba(37,99,235,0.18);
-  --bg: #0f1117;
-  --bg2: #181c27;
-  --bg3: #1e2334;
-  --card: #232940;
-  --card2: #2a3150;
-  --border: rgba(255,255,255,0.07);
-  --text: #f0f2fa;
-  --text2: #8b91ab;
-  --text3: #5a607a;
-  --red: #ef4444;
-  --green: #22c55e;
+  --accent: #6366f1;
+  --accent2: #4f46e5;
+  --accent3: #818cf8;
+  --accent-glow: rgba(99,102,241,0.22);
+  --accent-glow2: rgba(99,102,241,0.08);
+  --bg: #07080f;
+  --bg2: #0d0f1a;
+  --bg3: #131625;
+  --card: rgba(19,22,37,0.85);
+  --card2: rgba(26,30,52,0.9);
+  --card-solid: #13162A;
+  --border: rgba(99,102,241,0.12);
+  --border2: rgba(255,255,255,0.06);
+  --text: #eef0ff;
+  --text2: #8b90b8;
+  --text3: #4a5070;
+  --red: #f43f5e;
+  --green: #10b981;
   --yellow: #f59e0b;
-  --radius: 16px;
-  --radius-sm: 10px;
-  --shadow: 0 8px 32px rgba(0,0,0,0.35);
-  --shadow-sm: 0 2px 12px rgba(0,0,0,0.2);
+  --cyan: #06b6d4;
+  --purple: #a855f7;
+  --radius: 18px;
+  --radius-sm: 12px;
+  --radius-xs: 8px;
+  --shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(99,102,241,0.08);
+  --shadow-sm: 0 4px 16px rgba(0,0,0,0.3);
+  --shadow-glow: 0 0 32px rgba(99,102,241,0.18);
   --transition: all 0.22s cubic-bezier(.4,0,.2,1);
+  --glass: rgba(13,15,26,0.72);
+  --glass-border: rgba(255,255,255,0.08);
 }
-
+ 
 [data-theme="light"] {
-  --bg: #f4f6fb;
-  --bg2: #eaecf5;
-  --bg3: #e0e4f0;
-  --card: #ffffff;
-  --card2: #f0f3fc;
-  --border: rgba(0,0,0,0.07);
-  --text: #151928;
+  --bg: #f0f2ff;
+  --bg2: #e8eaff;
+  --bg3: #dde0ff;
+  --card: rgba(255,255,255,0.92);
+  --card2: rgba(240,242,255,0.95);
+  --card-solid: #ffffff;
+  --border: rgba(99,102,241,0.14);
+  --border2: rgba(99,102,241,0.08);
+  --text: #1a1c3a;
   --text2: #5a607a;
   --text3: #9ba3c0;
-  --shadow: 0 8px 32px rgba(60,80,160,0.10);
-  --shadow-sm: 0 2px 12px rgba(60,80,160,0.07);
+  --shadow: 0 8px 32px rgba(99,102,241,0.12);
+  --shadow-sm: 0 2px 12px rgba(99,102,241,0.08);
+  --glass: rgba(255,255,255,0.7);
+  --glass-border: rgba(99,102,241,0.12);
 }
-
-[data-accent="teal"] { --accent: #0d9488; --accent2: #0f766e; --accent-glow: rgba(13,148,136,0.18); }
-[data-accent="violet"] { --accent: #7c3aed; --accent2: #6d28d9; --accent-glow: rgba(124,58,237,0.18); }
-[data-accent="rose"] { --accent: #e11d48; --accent2: #be123c; --accent-glow: rgba(225,29,72,0.18); }
-[data-accent="amber"] { --accent: #d97706; --accent2: #b45309; --accent-glow: rgba(217,119,6,0.18); }
-[data-accent="blue"] { --accent: #2563eb; --accent2: #1d4ed8; --accent-glow: rgba(37,99,235,0.18); }
-
+ 
+[data-accent="teal"] { --accent: #14b8a6; --accent2: #0d9488; --accent3: #5eead4; --accent-glow: rgba(20,184,166,0.22); --accent-glow2: rgba(20,184,166,0.08); }
+[data-accent="violet"] { --accent: #a855f7; --accent2: #9333ea; --accent3: #c084fc; --accent-glow: rgba(168,85,247,0.22); --accent-glow2: rgba(168,85,247,0.08); }
+[data-accent="rose"] { --accent: #f43f5e; --accent2: #e11d48; --accent3: #fb7185; --accent-glow: rgba(244,63,94,0.22); --accent-glow2: rgba(244,63,94,0.08); }
+[data-accent="amber"] { --accent: #f59e0b; --accent2: #d97706; --accent3: #fbbf24; --accent-glow: rgba(245,158,11,0.22); --accent-glow2: rgba(245,158,11,0.08); }
+[data-accent="blue"] { --accent: #6366f1; --accent2: #4f46e5; --accent3: #818cf8; --accent-glow: rgba(99,102,241,0.22); --accent-glow2: rgba(99,102,241,0.08); }
+ 
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
-
+ 
 body {
   font-family: 'Plus Jakarta Sans', sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
-  transition: background 0.3s, color 0.3s;
+  transition: background 0.35s, color 0.35s;
 }
-
+ 
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 20%, rgba(99,102,241,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 75%, rgba(168,85,247,0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(6,182,212,0.06) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+  animation: ambientShift 18s ease-in-out infinite alternate;
+}
+ 
+[data-theme="light"] body::before {
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 20%, rgba(99,102,241,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 75%, rgba(168,85,247,0.04) 0%, transparent 55%);
+}
+ 
+@keyframes ambientShift {
+  0% { opacity:0.8; transform:scale(1); }
+  100% { opacity:1; transform:scale(1.05) translate(1%,1%); }
+}
+ 
 /* ─── SCROLLBAR ─── */
-::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--card2); border-radius: 2px; }
-
+::-webkit-scrollbar-thumb { background: var(--accent-glow); border-radius: 2px; }
+ 
 /* ─── AUTH SCREEN ─── */
 #auth-screen {
   min-height: 100vh;
@@ -89,84 +127,99 @@ body {
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: var(--bg);
+  background: transparent;
   position: relative;
   overflow: hidden;
+  z-index: 1;
 }
-
+ 
 #auth-screen::before {
   content: '';
   position: absolute;
-  top: -200px; left: -200px;
-  width: 600px; height: 600px;
-  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  top: -120px; left: -120px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, rgba(168,85,247,0.1) 40%, transparent 70%);
   pointer-events: none;
-  animation: pulse-bg 6s ease-in-out infinite;
+  animation: auroraFloat 10s ease-in-out infinite;
+  border-radius: 50%;
+  filter: blur(40px);
 }
-
+ 
 #auth-screen::after {
   content: '';
   position: absolute;
-  bottom: -150px; right: -100px;
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  bottom: -100px; right: -80px;
+  width: 380px; height: 380px;
+  background: radial-gradient(circle, rgba(6,182,212,0.15) 0%, rgba(99,102,241,0.08) 50%, transparent 70%);
   pointer-events: none;
-  animation: pulse-bg 8s ease-in-out infinite reverse;
+  animation: auroraFloat 14s ease-in-out infinite reverse;
+  border-radius: 50%;
+  filter: blur(35px);
 }
-
-@keyframes pulse-bg {
-  0%,100% { transform: scale(1); opacity: 0.5; }
-  50% { transform: scale(1.15); opacity: 1; }
+ 
+@keyframes auroraFloat {
+  0%,100% { transform: translate(0,0) scale(1); opacity:0.7; }
+  33% { transform: translate(30px,-20px) scale(1.08); opacity:1; }
+  66% { transform: translate(-15px,25px) scale(0.95); opacity:0.85; }
 }
-
+ 
+@keyframes slideUp {
+  from { opacity:0; transform: translateY(28px); }
+  to { opacity:1; transform: translateY(0); }
+}
+ 
 .auth-logo {
   font-family: 'Sora', sans-serif;
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   font-weight: 800;
   color: var(--text);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   position: relative;
   z-index:1;
-  letter-spacing: -0.5px;
+  letter-spacing: -1px;
+  text-shadow: 0 0 40px rgba(99,102,241,0.3);
 }
-
-.auth-logo span { color: var(--accent); }
-
+ 
+.auth-logo span {
+  background: linear-gradient(135deg, var(--accent3, #818cf8), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+ 
 .auth-tagline {
   color: var(--text2);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   margin-bottom: 40px;
-  font-weight: 300;
+  font-weight: 400;
   position: relative;
   z-index:1;
 }
-
+ 
 .auth-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 24px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 28px;
   padding: 36px 32px;
   width: 100%;
   max-width: 420px;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.06);
   position: relative;
   z-index: 1;
   animation: slideUp 0.5s cubic-bezier(.4,0,.2,1) both;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
 }
-
-@keyframes slideUp {
-  from { opacity:0; transform: translateY(30px); }
-  to { opacity:1; transform: translateY(0); }
-}
-
+ 
 .auth-tabs {
   display: flex;
-  background: var(--bg2);
+  background: rgba(255,255,255,0.04);
   border-radius: var(--radius-sm);
   padding: 4px;
   margin-bottom: 28px;
+  border: 1px solid rgba(255,255,255,0.06);
 }
-
+ 
 .auth-tab {
   flex: 1;
   padding: 10px;
@@ -174,35 +227,36 @@ body {
   background: transparent;
   color: var(--text2);
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 500;
-  border-radius: 7px;
+  border-radius: 9px;
   cursor: pointer;
   transition: var(--transition);
 }
-
+ 
 .auth-tab.active {
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
   color: #fff;
-  box-shadow: 0 2px 12px var(--accent-glow);
+  box-shadow: 0 2px 16px var(--accent-glow);
 }
-
+ 
 .form-group { margin-bottom: 18px; }
-
+ 
 .form-group label {
   display: block;
-  font-size: 0.8rem;
-  font-weight: 500;
+  font-size: 0.75rem;
+  font-weight: 700;
   color: var(--text2);
   margin-bottom: 7px;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
-
+ 
 .form-group input {
   width: 100%;
   padding: 13px 16px;
-  background: var(--bg2);
-  border: 1.5px solid var(--border);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: var(--radius-sm);
   color: var(--text);
   font-family: 'Plus Jakarta Sans', sans-serif;
@@ -210,17 +264,17 @@ body {
   outline: none;
   transition: var(--transition);
 }
-
+ 
 .form-group input:focus {
   border-color: var(--accent);
-  background: var(--bg3);
-  box-shadow: 0 0 0 3px var(--accent-glow);
+  background: rgba(99,102,241,0.06);
+  box-shadow: 0 0 0 3px var(--accent-glow2, rgba(99,102,241,0.08));
 }
-
+ 
 .btn-primary {
   width: 100%;
   padding: 14px;
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
   border: none;
   border-radius: var(--radius-sm);
   color: #fff;
@@ -229,28 +283,36 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
-  box-shadow: 0 4px 16px var(--accent-glow);
+  box-shadow: 0 4px 20px var(--accent-glow);
   margin-top: 4px;
+  position: relative;
+  overflow: hidden;
 }
-
-.btn-primary:hover { background: var(--accent2); transform: translateY(-1px); box-shadow: 0 6px 20px var(--accent-glow); }
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px var(--accent-glow); filter: brightness(1.06); }
 .btn-primary:active { transform: translateY(0); }
-
+ 
 .divider {
   display: flex;
   align-items: center;
   gap: 12px;
   margin: 20px 0;
   color: var(--text3);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
 }
-.divider::before, .divider::after { content:''; flex:1; height:1px; background: var(--border); }
-
+.divider::before, .divider::after { content:''; flex:1; height:1px; background: rgba(255,255,255,0.06); }
+ 
 .btn-google {
   width: 100%;
   padding: 13px;
-  background: var(--bg2);
-  border: 1.5px solid var(--border);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: var(--radius-sm);
   color: var(--text);
   font-family: 'Plus Jakarta Sans', sans-serif;
@@ -263,54 +325,65 @@ body {
   justify-content: center;
   gap: 10px;
 }
-
-.btn-google:hover { background: var(--bg3); border-color: var(--accent); }
-
+ 
+.btn-google:hover { background: rgba(255,255,255,0.08); border-color: var(--accent); }
+ 
 .google-icon { width: 18px; height: 18px; }
-
+ 
 .auth-error {
-  background: rgba(239,68,68,0.1);
-  border: 1px solid rgba(239,68,68,0.3);
-  border-radius: var(--radius-sm);
+  background: rgba(244,63,94,0.1);
+  border: 1px solid rgba(244,63,94,0.25);
+  border-radius: var(--radius-xs);
   padding: 10px 14px;
-  color: #ef4444;
+  color: #fb7185;
   font-size: 0.85rem;
   margin-bottom: 16px;
   display: none;
 }
-
+ 
 /* ─── APP SHELL ─── */
-#app-screen { display: none; flex-direction: column; min-height: 100vh; }
-
+#app-screen { display: none; flex-direction: column; min-height: 100vh; position: relative; z-index: 1; }
+ 
 /* ─── TOPBAR ─── */
 .topbar {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
+  background: rgba(7,8,15,0.75);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
   padding: 14px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
-
+ 
+[data-theme="light"] .topbar {
+  background: rgba(240,242,255,0.8);
+  border-bottom-color: rgba(99,102,241,0.1);
+}
+ 
 .topbar-logo {
   font-family: 'Sora', sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.22rem;
   font-weight: 800;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.4px;
   color: var(--text);
 }
-.topbar-logo span { color: var(--accent); }
-
+.topbar-logo span {
+  background: linear-gradient(135deg, #818cf8, var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+ 
 .topbar-right { display: flex; align-items: center; gap: 12px; }
-
+ 
 .avatar-btn {
   width: 38px; height: 38px;
   border-radius: 50%;
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
   border: none;
   cursor: pointer;
   display: flex;
@@ -318,27 +391,32 @@ body {
   justify-content: center;
   color: #fff;
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 700;
   font-family: 'Plus Jakarta Sans', sans-serif;
   overflow: hidden;
   transition: var(--transition);
-  box-shadow: 0 2px 8px var(--accent-glow);
+  box-shadow: 0 2px 12px var(--accent-glow);
 }
-
 .avatar-btn img { width:100%; height:100%; object-fit:cover; }
-.avatar-btn:hover { transform: scale(1.07); }
-
+.avatar-btn:hover { transform: scale(1.08); box-shadow: 0 4px 20px var(--accent-glow); }
+ 
 /* ─── BOTTOM NAV ─── */
 .bottom-nav {
   position: fixed;
   bottom: 0; left: 0; right: 0;
   z-index: 100;
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
+  background: rgba(7,8,15,0.82);
+  border-top: 1px solid rgba(255,255,255,0.06);
   display: flex;
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
-
+ 
+[data-theme="light"] .bottom-nav {
+  background: rgba(240,242,255,0.85);
+  border-top-color: rgba(99,102,241,0.1);
+}
+ 
 .nav-btn {
   flex: 1;
   padding: 12px 0 10px;
@@ -352,30 +430,38 @@ body {
   gap: 4px;
   transition: var(--transition);
   font-family: 'Plus Jakarta Sans', sans-serif;
+  position: relative;
 }
-
-.nav-btn i { font-size: 1.15rem; }
-.nav-btn span { font-size: 0.68rem; font-weight: 500; }
-
+.nav-btn i { font-size: 1.15rem; transition: var(--transition); }
+.nav-btn span { font-size: 0.67rem; font-weight: 500; }
 .nav-btn.active { color: var(--accent); }
-.nav-btn.active i { transform: scale(1.1); }
-
+.nav-btn.active i { transform: scale(1.1); filter: drop-shadow(0 0 6px var(--accent-glow)); }
+.nav-btn.active::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 24px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  border-radius: 0 0 2px 2px;
+}
+ 
 /* ─── PAGES ─── */
 .page {
   display: none;
   flex-direction: column;
   flex: 1;
-  padding: 20px 20px 90px;
-  animation: fadeIn 0.25s ease both;
+  padding: 20px 18px 100px;
+  animation: fadeIn 0.3s ease both;
 }
-
+ 
 .page.active { display: flex; }
-
+ 
 @keyframes fadeIn {
-  from { opacity:0; transform: translateY(8px); }
+  from { opacity:0; transform: translateY(10px); }
   to { opacity:1; transform: translateY(0); }
 }
-
+ 
 /* ─── PAGE HEADER ─── */
 .page-header {
   display: flex;
@@ -383,28 +469,28 @@ body {
   justify-content: space-between;
   margin-bottom: 20px;
 }
-
+ 
 .page-title {
   font-family: 'Sora', sans-serif;
-  font-size: 1.45rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.4px;
   color: var(--text);
 }
-
+ 
 .page-title small {
   display: block;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 400;
   color: var(--text2);
-  margin-top: 1px;
+  margin-top: 2px;
 }
-
+ 
 .btn-add {
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  background: var(--accent);
+  width: 42px; height: 42px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
   border: none;
   color: #fff;
   font-size: 1.2rem;
@@ -412,14 +498,23 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 14px var(--accent-glow);
+  box-shadow: 0 4px 16px var(--accent-glow);
   transition: var(--transition);
+  position: relative;
+  overflow: hidden;
 }
-.btn-add:hover { transform: scale(1.08) rotate(90deg); }
-
+.btn-add::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+  pointer-events: none;
+}
+.btn-add:hover { transform: scale(1.08) rotate(90deg); box-shadow: 0 8px 24px var(--accent-glow); }
+ 
 /* ─── AVISO CARD ─── */
 .avisos-list { display: flex; flex-direction: column; gap: 10px; }
-
+ 
 .aviso-card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -433,18 +528,18 @@ body {
   position: relative;
   overflow: hidden;
 }
-
+ 
 .aviso-card:hover { background: var(--card2); transform: translateX(2px); }
-
+ 
 .aviso-color-dot {
   width: 10px; height: 10px;
   border-radius: 50%;
   flex-shrink: 0;
   box-shadow: 0 0 8px currentColor;
 }
-
+ 
 .aviso-info { flex: 1; min-width: 0; }
-
+ 
 .aviso-nombre {
   font-size: 0.92rem;
   font-weight: 600;
@@ -453,7 +548,7 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
+ 
 .aviso-meta {
   font-size: 0.75rem;
   color: var(--text2);
@@ -462,7 +557,7 @@ body {
   align-items: center;
   gap: 8px;
 }
-
+ 
 .aviso-badge {
   font-size: 0.65rem;
   padding: 2px 7px;
@@ -470,9 +565,9 @@ body {
   font-weight: 600;
   letter-spacing: 0.3px;
 }
-
+ 
 .aviso-actions { display: flex; gap: 4px; }
-
+ 
 .action-btn {
   width: 32px; height: 32px;
   border-radius: 8px;
@@ -486,11 +581,11 @@ body {
   background: var(--bg2);
   color: var(--text2);
 }
-
+ 
 .action-btn:hover { background: var(--accent); color: #fff; }
 .action-btn.done:hover { background: var(--green); }
 .action-btn.del:hover { background: var(--red); }
-
+ 
 /* ─── EMPTY STATE ─── */
 .empty-state {
   display: flex;
@@ -502,10 +597,10 @@ body {
   text-align: center;
   gap: 12px;
 }
-
+ 
 .empty-state i { font-size: 3rem; opacity: 0.3; }
 .empty-state p { font-size: 0.9rem; }
-
+ 
 /* ─── SECTION CHIPS ─── */
 .chips {
   display: flex;
@@ -515,7 +610,7 @@ body {
   padding-bottom: 4px;
 }
 .chips::-webkit-scrollbar { display: none; }
-
+ 
 .chip {
   padding: 7px 16px;
   border-radius: 20px;
@@ -531,7 +626,7 @@ body {
 }
 .chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 .chip:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
-
+ 
 /* ─── MODAL ─── */
 .modal-overlay {
   position: fixed;
@@ -546,9 +641,17 @@ body {
   pointer-events: none;
   transition: opacity 0.25s;
 }
-
+ 
 .modal-overlay.open { opacity: 1; pointer-events: all; }
-
+ 
+/* Prevent pull-to-refresh when scrolling inside a modal */
+.modal-overlay {
+  overscroll-behavior: contain;
+}
+.modal {
+  overscroll-behavior: contain;
+}
+ 
 .modal {
   background: var(--bg2);
   border: 1px solid var(--border);
@@ -560,16 +663,16 @@ body {
   transition: transform 0.3s cubic-bezier(.4,0,.2,1);
   pointer-events: all;
 }
-
+ 
 .modal-overlay.open .modal { transform: translateY(0); }
-
+ 
 .modal-handle {
   width: 40px; height: 4px;
   background: var(--border);
   border-radius: 2px;
   margin: 0 auto 20px;
 }
-
+ 
 .modal-title {
   font-family: 'Sora', sans-serif;
   font-size: 1.15rem;
@@ -578,7 +681,7 @@ body {
   margin-bottom: 20px;
   color: var(--text);
 }
-
+ 
 .modal textarea {
   width: 100%;
   padding: 13px 16px;
@@ -593,9 +696,9 @@ body {
   transition: var(--transition);
   line-height: 1.5;
 }
-
+ 
 .modal textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
-
+ 
 .modal input[type="text"], .modal input[type="date"], .modal input[type="number"] {
   width: 100%;
   padding: 13px 16px;
@@ -609,16 +712,16 @@ body {
   transition: var(--transition);
   margin-bottom: 12px;
 }
-
+ 
 .modal input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
-
+ 
 .modal-row {
   display: flex;
   gap: 10px;
   margin-bottom: 12px;
   align-items: center;
 }
-
+ 
 .modal-label {
   font-size: 0.8rem;
   color: var(--text2);
@@ -626,9 +729,9 @@ body {
   margin-bottom: 7px;
   display: block;
 }
-
+ 
 .color-selector { display: flex; gap: 8px; align-items: center; }
-
+ 
 .color-opt {
   width: 28px; height: 28px;
   border-radius: 50%;
@@ -641,9 +744,9 @@ body {
 .color-opt[data-c="green"] { background: var(--green); }
 .color-opt[data-c="yellow"] { background: var(--yellow); }
 .color-opt[data-c="accent"] { background: var(--accent); }
-
+ 
 .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
-
+ 
 .btn-sec {
   flex: 1;
   padding: 13px;
@@ -658,7 +761,7 @@ body {
   transition: var(--transition);
 }
 .btn-sec:hover { border-color: var(--accent); color: var(--accent); }
-
+ 
 .btn-modal-save {
   flex: 2;
   padding: 13px;
@@ -674,7 +777,7 @@ body {
   box-shadow: 0 4px 14px var(--accent-glow);
 }
 .btn-modal-save:hover { background: var(--accent2); }
-
+ 
 /* ─── CALENDARIO ─── */
 .cal-header {
   display: flex;
@@ -682,7 +785,7 @@ body {
   justify-content: space-between;
   margin-bottom: 16px;
 }
-
+ 
 .cal-nav {
   width: 36px; height: 36px;
   border-radius: 50%;
@@ -694,21 +797,21 @@ body {
   transition: var(--transition);
 }
 .cal-nav:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-
+ 
 .cal-month {
   font-family: 'Sora', sans-serif;
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: -0.2px;
 }
-
+ 
 .cal-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 4px;
   margin-bottom: 20px;
 }
-
+ 
 .cal-day-header {
   text-align: center;
   font-size: 0.7rem;
@@ -718,7 +821,7 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-
+ 
 .cal-day {
   aspect-ratio: 1;
   display: flex;
@@ -732,7 +835,7 @@ body {
   position: relative;
   color: var(--text2);
 }
-
+ 
 .cal-day:hover { background: var(--card2); color: var(--text); }
 .cal-day.today { color: var(--accent); font-weight: 700; }
 .cal-day.today::after { content:''; position:absolute; bottom:3px; left:50%; transform:translateX(-50%); width:4px; height:4px; border-radius:50%; background:var(--accent); }
@@ -740,7 +843,7 @@ body {
 .cal-day.has-avisos::before { content:''; position:absolute; top:5px; right:5px; width:5px; height:5px; border-radius:50%; background: var(--accent); box-shadow: 0 0 6px var(--accent); }
 .cal-day.selected { background: var(--accent) !important; color: #fff !important; }
 .cal-day.other-month { opacity: 0.25; }
-
+ 
 /* ─── PRESUPUESTO ─── */
 .presup-card {
   background: var(--card);
@@ -752,29 +855,29 @@ body {
   cursor: pointer;
   animation: slideUp 0.3s ease both;
 }
-
+ 
 .presup-card:hover { background: var(--card2); transform: translateX(2px); }
-
+ 
 .presup-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
-
+ 
 .presup-num {
   font-size: 0.7rem;
   color: var(--text3);
   font-weight: 500;
   letter-spacing: 0.5px;
 }
-
+ 
 .presup-badge {
   font-size: 0.68rem;
   padding: 3px 9px;
   border-radius: 20px;
   font-weight: 600;
 }
-
+ 
 .presup-nombre { font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; }
 .presup-cliente { font-size: 0.8rem; color: var(--text2); }
 .presup-total { font-size: 1.1rem; font-weight: 700; color: var(--accent); margin-top: 8px; }
-
+ 
 /* ─── PRESUPUESTO DETAIL ─── */
 .presup-detail-line {
   display: flex;
@@ -795,7 +898,7 @@ body {
   margin-top: 12px;
   font-weight: 700;
 }
-
+ 
 /* ─── PERFIL ─── */
 .profile-header {
   display: flex;
@@ -805,12 +908,12 @@ body {
   border-bottom: 1px solid var(--border);
   margin-bottom: 24px;
 }
-
+ 
 .profile-avatar-wrap {
   position: relative;
   margin-bottom: 12px;
 }
-
+ 
 .profile-avatar {
   width: 90px; height: 90px;
   border-radius: 50%;
@@ -821,9 +924,9 @@ body {
   font-family: 'Sora', sans-serif;
   box-shadow: 0 0 0 4px var(--accent-glow), 0 8px 24px var(--accent-glow);
 }
-
+ 
 .profile-avatar img { width:100%; height:100%; object-fit:cover; }
-
+ 
 .profile-avatar-edit {
   position: absolute;
   bottom: 0; right: 0;
@@ -838,12 +941,12 @@ body {
   transition: var(--transition);
 }
 .profile-avatar-edit:hover { background: var(--accent2); transform: scale(1.1); }
-
+ 
 .profile-name { font-family: 'Sora', sans-serif; font-size: 1.3rem; font-weight: 700; letter-spacing: -0.2px; }
 .profile-email { font-size: 0.82rem; color: var(--text2); margin-top: 3px; }
-
+ 
 .settings-section { margin-bottom: 28px; }
-
+ 
 .settings-label {
   font-size: 0.72rem;
   font-weight: 600;
@@ -852,7 +955,7 @@ body {
   text-transform: uppercase;
   margin-bottom: 10px;
 }
-
+ 
 .settings-row {
   background: var(--card);
   border: 1px solid var(--border);
@@ -866,12 +969,12 @@ body {
   transition: var(--transition);
 }
 .settings-row:hover { background: var(--card2); }
-
+ 
 .settings-row-left { display: flex; align-items: center; gap: 12px; }
 .settings-row-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--accent-glow); color: var(--accent); display:flex; align-items:center; justify-content:center; font-size: 0.85rem; }
 .settings-row-text { font-size: 0.9rem; font-weight: 500; }
 .settings-row-sub { font-size: 0.75rem; color: var(--text2); }
-
+ 
 /* ─── TOGGLE ─── */
 .toggle {
   width: 44px; height: 24px;
@@ -894,7 +997,7 @@ body {
   box-shadow: 0 1px 4px rgba(0,0,0,0.2);
 }
 .toggle.on::after { left: 23px; }
-
+ 
 /* ─── ACCENT PICKER ─── */
 .accent-grid {
   display: grid;
@@ -902,7 +1005,7 @@ body {
   gap: 8px;
   margin-top: 10px;
 }
-
+ 
 .accent-opt {
   aspect-ratio: 1;
   border-radius: 10px;
@@ -919,7 +1022,7 @@ body {
 .accent-opt[data-a="violet"] { background: #7c3aed; }
 .accent-opt[data-a="rose"] { background: #e11d48; }
 .accent-opt[data-a="amber"] { background: #d97706; }
-
+ 
 /* ─── COBROS badge ─── */
 .cobro-btn {
   padding: 5px 12px;
@@ -935,7 +1038,7 @@ body {
 }
 .cobro-btn.cobrado { background: rgba(34,197,94,0.12); border-color: var(--green); color: var(--green); }
 .cobro-btn.pendiente { background: rgba(245,158,11,0.12); border-color: var(--yellow); color: var(--yellow); }
-
+ 
 /* ─── TOAST ─── */
 .toast {
   position: fixed;
@@ -957,7 +1060,7 @@ body {
   pointer-events: none;
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
+ 
 /* ─── SPINNER ─── */
 .spinner {
   width: 20px; height: 20px;
@@ -968,7 +1071,7 @@ body {
   display: inline-block;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-
+ 
 /* ─── RESUMEN COBROS ─── */
 .cobros-banner {
   background: linear-gradient(135deg, var(--accent), var(--accent2));
@@ -981,7 +1084,7 @@ body {
 }
 .cobros-banner-label { font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-bottom: 2px; }
 .cobros-banner-amount { font-size: 1.6rem; font-weight: 700; font-family: 'Sora', sans-serif; color: #fff; }
-
+ 
 /* ─── DETAIL MODAL ─── */
 .detail-actions {
   display: grid;
@@ -989,12 +1092,12 @@ body {
   gap: 8px;
   margin-top: 20px;
 }
-
+ 
 .detail-actions .btn-modal-save, .detail-actions .btn-sec {
   flex: none;
   width: 100%;
 }
-
+ 
 /* ─── SEARCH BAR ─── */
 .search-bar-wrap {
   position: relative;
@@ -1022,7 +1125,7 @@ body {
   transition: var(--transition);
 }
 .search-bar-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
-
+ 
 /* ─── SWIPE CARD WRAPPER ─── */
 .swipe-wrapper {
   position: relative;
@@ -1053,7 +1156,7 @@ body {
   will-change: transform;
 }
 .swipe-card-inner.swiping { transition: none; }
-
+ 
 /* ─── AVISO OVERDUE BANNER ─── */
 .avisos-overdue-section {
   background: rgba(239,68,68,0.10);
@@ -1105,10 +1208,10 @@ body {
   transition: opacity 0.15s;
 }
 .overdue-close:hover { opacity: 1; }
-
+ 
 /* ─── RESTORE SWIPE (completados / rechazados) ─── */
 .swipe-restore-bg { background: var(--yellow) !important; }
-
+ 
 /* ─── PRESUP LINE REMOVE (keep for edit compat) ─── */
 .presup-line-remove {
   width: 32px; height: 32px; flex-shrink: 0;
@@ -1122,37 +1225,7 @@ body {
   font-size: 0.8rem;
 }
 .presup-line-remove:hover { background: var(--red); color: #fff; border-color: var(--red); }
-
-/* ─── LOGIN LOADING ─── */
-.loading-screen {
-.presup-line-remove {
-  width: 32px; height: 32px; flex-shrink: 0;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--text3);
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: var(--transition);
-  font-size: 0.8rem;
-}
-.presup-line-remove:hover { background: var(--red); color: #fff; border-color: var(--red); }
-
-.btn-add-line {
-  width: 100%;
-  padding: 10px;
-  border: 1.5px dashed var(--border);
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--text3);
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: var(--transition);
-  margin-bottom: 12px;
-}
-.btn-add-line:hover { border-color: var(--accent); color: var(--accent); }
-
+ 
 /* ─── LOGIN LOADING ─── */
 .loading-screen {
   position: fixed;
@@ -1166,7 +1239,7 @@ body {
   gap: 16px;
   transition: opacity 0.4s;
 }
-
+ 
 .loading-logo {
   font-family: 'Sora', sans-serif;
   font-size: 2.2rem;
@@ -1176,30 +1249,30 @@ body {
 }
 .loading-logo span { color: var(--accent); }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
-
+ 
 </style>
 </head>
 <body>
-
+ 
 <!-- LOADING -->
 <div class="loading-screen" id="loading-screen">
   <div class="loading-logo">Relaja<span>Tu</span>Mente</div>
   <div class="spinner" style="border-color:var(--border);border-top-color:var(--accent);width:28px;height:28px;border-width:3px;"></div>
 </div>
-
+ 
 <!-- AUTH -->
 <div id="auth-screen">
   <div class="auth-logo">Relaja<span>Tu</span>Mente</div>
   <p class="auth-tagline">Organiza tu día, vacía tu mente</p>
-
+ 
   <div class="auth-card">
     <div class="auth-tabs">
       <button class="auth-tab active" onclick="switchAuthTab('login')">Iniciar sesión</button>
       <button class="auth-tab" onclick="switchAuthTab('register')">Registrarse</button>
     </div>
-
+ 
     <div class="auth-error" id="auth-error"></div>
-
+ 
     <div id="form-login">
       <div class="form-group">
         <label>Correo electrónico</label>
@@ -1211,7 +1284,7 @@ body {
       </div>
       <button class="btn-primary" id="btn-login" onclick="doLogin()">Entrar</button>
     </div>
-
+ 
     <div id="form-register" style="display:none">
       <div class="form-group">
         <label>Nombre</label>
@@ -1227,16 +1300,16 @@ body {
       </div>
       <button class="btn-primary" id="btn-register" onclick="doRegister()">Crear cuenta</button>
     </div>
-
+ 
     <div class="divider">o continúa con</div>
-
+ 
     <button class="btn-google" onclick="doGoogle()">
       <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
       Google
     </button>
   </div>
 </div>
-
+ 
 <!-- APP -->
 <div id="app-screen">
   <!-- TOPBAR -->
@@ -1248,60 +1321,59 @@ body {
       </button>
     </div>
   </div>
-
+ 
   <!-- PAGES -->
-
-  <!-- AVISOS -->
+ 
+  <!-- TAREAS -->
   <div class="page active" id="page-avisos">
     <div class="page-header">
       <div class="page-title">
-        Avisos
+        Tareas
         <small id="avisos-count">Cargando...</small>
       </div>
       <button class="btn-add" onclick="openModal('modal-aviso')"><i class="fas fa-plus"></i></button>
     </div>
-
+ 
     <div class="chips">
       <button class="chip active" onclick="filterAvisos('pendiente', this)">Pendientes</button>
-      <button class="chip" onclick="filterAvisos('sin-fecha', this)">Sin fecha</button>
       <button class="chip" onclick="filterAvisos('completados', this)">Completados</button>
     </div>
-
+ 
     <div class="search-bar-wrap">
       <i class="fas fa-search search-bar-icon"></i>
-      <input type="text" class="search-bar-input" id="avisos-search" placeholder="Buscar aviso..." oninput="renderAvisos()">
+      <input type="text" class="search-bar-input" id="avisos-search" placeholder="Buscar tarea o recordatorio..." oninput="renderAvisos()">
     </div>
-
+ 
     <div id="avisos-overdue-banner" style="display:none"></div>
     <div id="avisos-today-banner" style="display:none"></div>
-
+ 
     <div class="avisos-list" id="avisos-list">
-      <div class="empty-state"><i class="fas fa-inbox"></i><p>No hay avisos todavía.<br>Pulsa + para añadir uno.</p></div>
+      <div class="empty-state"><i class="fas fa-inbox"></i><p>No hay tareas todavía.<br>Pulsa + para añadir una.</p></div>
     </div>
   </div>
-
+ 
   <!-- CALENDARIO -->
   <div class="page" id="page-calendario">
     <div class="page-header">
       <div class="page-title">Calendario</div>
     </div>
-
+ 
     <div class="cal-header">
       <button class="cal-nav" onclick="changeMonth(-1)"><i class="fas fa-chevron-left"></i></button>
       <div class="cal-month" id="cal-month-label">Mayo 2025</div>
       <button class="cal-nav" onclick="changeMonth(1)"><i class="fas fa-chevron-right"></i></button>
     </div>
-
+ 
     <div class="cal-grid" id="cal-grid"></div>
-
+ 
     <div id="cal-day-avisos">
       <div class="empty-state" style="padding:20px">
         <i class="fas fa-calendar-day" style="font-size:1.8rem"></i>
-        <p style="font-size:0.85rem">Pulsa un día para ver sus avisos</p>
+        <p style="font-size:0.85rem">Pulsa un día para ver sus tareas</p>
       </div>
     </div>
   </div>
-
+ 
   <!-- PRESUPUESTOS -->
   <div class="page" id="page-presupuestos">
     <div class="page-header">
@@ -1310,26 +1382,26 @@ body {
       </div>
       <button class="btn-add" onclick="openModal('modal-presup')"><i class="fas fa-plus"></i></button>
     </div>
-
+ 
     <div id="cobros-banner" style="display:none"></div>
-
+ 
     <div class="chips">
       <button class="chip active" onclick="filterPresup('pendiente', this)">Pendientes</button>
       <button class="chip" onclick="filterPresup('aceptado', this)">Aceptados</button>
       <button class="chip" onclick="filterPresup('rechazado', this)">Rechazados</button>
       <button class="chip" onclick="filterPresup('cobrado', this)">Cobrados</button>
     </div>
-
+ 
     <div class="search-bar-wrap">
       <i class="fas fa-search search-bar-icon"></i>
       <input type="text" class="search-bar-input" id="presup-search" placeholder="Buscar presupuesto..." oninput="renderPresupuestos()">
     </div>
-
+ 
     <div id="presup-list">
       <div class="empty-state"><i class="fas fa-file-invoice"></i><p>No hay presupuestos.<br>Pulsa + para crear uno.</p></div>
     </div>
   </div>
-
+ 
   <!-- PERFIL -->
   <div class="page" id="page-perfil">
     <div class="profile-header">
@@ -1343,10 +1415,10 @@ body {
       <div class="profile-name" id="profile-name-display">Usuario</div>
       <div class="profile-email" id="profile-email-display">email</div>
     </div>
-
+ 
     <div class="settings-section">
       <div class="settings-label">Apariencia</div>
-
+ 
       <div class="settings-row" onclick="toggleTheme()">
         <div class="settings-row-left">
           <div class="settings-row-icon"><i class="fas fa-moon"></i></div>
@@ -1356,7 +1428,7 @@ body {
         </div>
         <div class="toggle" id="theme-toggle"></div>
       </div>
-
+ 
       <div class="settings-row" style="cursor:default; flex-direction:column; align-items:flex-start; gap:10px">
         <div class="settings-row-left">
           <div class="settings-row-icon"><i class="fas fa-palette"></i></div>
@@ -1371,21 +1443,21 @@ body {
         </div>
       </div>
     </div>
-
+ 
     <div class="settings-section">
       <div class="settings-label">Sistema</div>
-
+ 
       <div class="settings-row" onclick="toggleVib()">
         <div class="settings-row-left">
           <div class="settings-row-icon"><i class="fas fa-mobile-screen"></i></div>
           <div>
             <div class="settings-row-text">Vibración</div>
-            <div class="settings-row-sub">Al guardar o marcar avisos</div>
+            <div class="settings-row-sub">Al guardar o completar tareas</div>
           </div>
         </div>
         <div class="toggle on" id="vib-toggle"></div>
       </div>
-
+ 
       <div class="settings-row" onclick="doLogout()">
         <div class="settings-row-left">
           <div class="settings-row-icon" style="background:rgba(239,68,68,0.1);color:var(--red)"><i class="fas fa-sign-out-alt"></i></div>
@@ -1395,12 +1467,12 @@ body {
       </div>
     </div>
   </div>
-
+ 
   <!-- BOTTOM NAV -->
   <nav class="bottom-nav">
     <button class="nav-btn active" onclick="showPage('avisos',this)">
       <i class="fas fa-bolt"></i>
-      <span>Avisos</span>
+      <span>Tareas</span>
     </button>
     <button class="nav-btn" onclick="showPage('calendario',this)">
       <i class="fas fa-calendar"></i>
@@ -1416,25 +1488,25 @@ body {
     </button>
   </nav>
 </div>
-
-<!-- MODAL NUEVO AVISO -->
+ 
+<!-- MODAL NUEVA TAREA -->
 <div class="modal-overlay" id="modal-aviso">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title" id="modal-aviso-title">Nuevo aviso</div>
-
+    <div class="modal-title" id="modal-aviso-title">Nueva tarea / recordatorio</div>
+ 
     <input type="hidden" id="aviso-edit-id">
-
+ 
     <span class="modal-label">Descripción</span>
-    <textarea id="aviso-desc" rows="3" placeholder="Describe el aviso..." style="margin-bottom:12px"></textarea>
-
+    <textarea id="aviso-desc" rows="3" placeholder="Describe la tarea o recordatorio..." style="margin-bottom:12px"></textarea>
+ 
     <div class="modal-row">
       <div style="flex:1">
         <span class="modal-label">Fecha (opcional)</span>
         <input type="date" id="aviso-fecha" style="margin-bottom:0">
       </div>
     </div>
-
+ 
     <span class="modal-label" style="display:block;margin-top:8px;margin-bottom:8px">Urgencia</span>
     <div class="color-selector">
       <div class="color-opt selected" data-c="green" onclick="selectColor(this)" title="Normal"></div>
@@ -1443,37 +1515,37 @@ body {
       <div class="color-opt" data-c="accent" onclick="selectColor(this)" title="Informativo"></div>
       <span style="font-size:0.75rem;color:var(--text3);margin-left:4px">Pulsa para seleccionar</span>
     </div>
-
+ 
     <div class="modal-actions">
       <button class="btn-sec" onclick="closeModal('modal-aviso')">Cancelar</button>
       <button class="btn-modal-save" onclick="saveAviso()">Guardar</button>
     </div>
   </div>
 </div>
-
+ 
 <!-- MODAL NUEVO PRESUPUESTO -->
 <div class="modal-overlay" id="modal-presup">
   <div class="modal" style="border-radius:24px;max-height:85vh;overflow-y:auto">
     <div class="modal-handle"></div>
     <div class="modal-title">Nuevo presupuesto</div>
-
+ 
     <input type="hidden" id="presup-edit-id">
-
+ 
     <span class="modal-label">Nombre del trabajo</span>
     <input type="text" id="presup-nombre" placeholder="Ej: Cambio grifo cocina">
-
+ 
     <span class="modal-label">Cliente</span>
     <input type="text" id="presup-cliente" placeholder="Nombre del cliente">
-
+ 
     <span class="modal-label">Fecha</span>
     <input type="date" id="presup-fecha">
-
+ 
     <span class="modal-label">Descripción general (opcional)</span>
     <textarea id="presup-descripcion" rows="3" placeholder="Describe el trabajo a realizar..." style="margin-bottom:12px"></textarea>
-
+ 
     <span class="modal-label">Precio total (sin IVA)</span>
     <input type="number" id="presup-precio-base" placeholder="0,00" step="0.01" min="0" oninput="updatePresupTotalSimple()">
-
+ 
     <div style="margin-top:4px;margin-bottom:4px">
       <details style="background:var(--bg3);border-radius:var(--radius-sm);overflow:hidden">
         <summary style="padding:11px 14px;cursor:pointer;font-size:0.85rem;font-weight:600;color:var(--text2);list-style:none;display:flex;align-items:center;justify-content:space-between">
@@ -1489,35 +1561,35 @@ body {
         <div style="padding:0 14px 12px;font-size:0.8rem;color:var(--text3)" id="iva-info-text"></div>
       </details>
     </div>
-
+ 
     <div class="presup-detail-line" style="border-top:1px solid var(--border);padding-top:14px;margin-top:8px">
       <span style="font-weight:600">TOTAL</span>
       <span style="font-size:1.2rem;font-weight:700;color:var(--accent)" id="presup-total-preview">0,00 €</span>
     </div>
-
+ 
     <div class="modal-actions">
       <button class="btn-sec" onclick="closeModal('modal-presup')">Cancelar</button>
       <button class="btn-modal-save" onclick="savePresup()">Guardar</button>
     </div>
   </div>
 </div>
-
-<!-- MODAL DETALLE AVISO -->
+ 
+<!-- MODAL DETALLE TAREA -->
 <div class="modal-overlay" id="modal-aviso-detail">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title" id="aviso-detail-title">Aviso</div>
+    <div class="modal-title" id="aviso-detail-title">Tarea / Recordatorio</div>
     <div id="aviso-detail-content" style="color:var(--text2);font-size:0.9rem;line-height:1.6;margin-bottom:16px"></div>
     <div id="aviso-detail-fecha" style="font-size:0.8rem;color:var(--text3);margin-bottom:20px"></div>
-    <div class="detail-actions">
+    <div class="detail-actions" id="aviso-detail-actions">
       <button class="btn-sec" onclick="editAvisoFromDetail()"><i class="fas fa-pen"></i> Editar</button>
-      <button class="btn-modal-save" id="btn-resolver-aviso" onclick="resolverAvisoFromDetail()"><i class="fas fa-check"></i> Resolver</button>
+      <button class="btn-modal-save" id="btn-resolver-aviso" onclick="resolverAvisoFromDetail()"><i class="fas fa-check"></i> Completar</button>
       <button class="btn-sec" style="color:var(--red);border-color:rgba(239,68,68,0.3)" onclick="eliminarAvisoFromDetail()"><i class="fas fa-trash"></i> Eliminar</button>
       <button class="btn-sec" onclick="closeModal('modal-aviso-detail')">Cerrar</button>
     </div>
   </div>
 </div>
-
+ 
 <!-- MODAL DETALLE PRESUPUESTO -->
 <div class="modal-overlay" id="modal-presup-detail">
   <div class="modal" style="border-radius:24px;max-height:85vh;overflow-y:auto">
@@ -1526,17 +1598,17 @@ body {
     <div class="detail-actions" id="presup-detail-actions"></div>
   </div>
 </div>
-
+ 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
-
+ 
 <!-- FIREBASE SDK -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
+ 
 const firebaseConfig = {
   apiKey: "AIzaSyBqTT7vHGit1zndeRUOG_JETZei4DqCKFs",
   authDomain: "app-alberto-d71fb.firebaseapp.com",
@@ -1546,20 +1618,20 @@ const firebaseConfig = {
   appId: "1:983553127204:web:bef3cffa1b3f308979b9b1",
   measurementId: "G-RE1M0FCR38"
 };
-
+ 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 const provider = new GoogleAuthProvider();
-
+ 
 // ─── EXPOSE GLOBALS ───
 window._auth = auth;
 window._db = db;
 window._storage = storage;
 window._provider = provider;
 window._fns = { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, signOut, updateProfile, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, orderBy, onSnapshot, serverTimestamp };
-
+ 
 // ─── AUTH STATE ───
 window._onAuthReady = function(onAuthStateChangedFn) {
   onAuthStateChangedFn(auth, user => {
@@ -1577,7 +1649,7 @@ window._onAuthReady = function(onAuthStateChangedFn) {
 };
 window._fns._onAuthStateChanged = onAuthStateChanged;
 </script>
-
+ 
 <script>
 // ─── STATE ───
 let currentUser = null;
@@ -1594,13 +1666,13 @@ let currentIva = 0;
 let vibOn = true;
 let unsubAvisos = null;
 let unsubPresup = null;
-
+ 
 // ─── APP INIT ───
 function showApp(user) {
   currentUser = user;
   document.getElementById('auth-screen').style.display = 'none';
   document.getElementById('app-screen').style.display = 'flex';
-
+ 
   // Avatar
   const initials = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
   document.getElementById('avatar-initials').textContent = user.photoURL ? '' : initials;
@@ -1610,10 +1682,10 @@ function showApp(user) {
   } else {
     document.getElementById('profile-avatar-big').textContent = initials;
   }
-
+ 
   document.getElementById('profile-name-display').textContent = user.displayName || 'Sin nombre';
   document.getElementById('profile-email-display').textContent = user.email;
-
+ 
   // Load preferences
   const savedTheme = localStorage.getItem('rtm-theme') || 'light';
   const savedAccent = localStorage.getItem('rtm-accent') || 'blue';
@@ -1629,20 +1701,20 @@ function showApp(user) {
     o.classList.toggle('selected', o.dataset.a === savedAccent);
     o.innerHTML = o.dataset.a === savedAccent ? '<i class="fas fa-check"></i>' : '';
   });
-
+ 
   vibOn = localStorage.getItem('rtm-vib') !== 'false';
   document.getElementById('vib-toggle').classList.toggle('on', vibOn);
-
+ 
   // Calendar
   const now = new Date();
   calYear = now.getFullYear();
   calMonth = now.getMonth();
-
+ 
   // Load data
   loadAvisos();
   loadPresupuestos();
   renderCalendar();
-
+ 
   // Test de escritura Firebase al arrancar
   (async () => {
     try {
@@ -1658,7 +1730,7 @@ function showApp(user) {
     }
   })();
 }
-
+ 
 // ─── AUTH ACTIONS ───
 window.switchAuthTab = function(tab) {
   document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='register')));
@@ -1666,7 +1738,7 @@ window.switchAuthTab = function(tab) {
   document.getElementById('form-register').style.display = tab === 'register' ? '' : 'none';
   document.getElementById('auth-error').style.display = 'none';
 };
-
+ 
 window.doLogin = async function() {
   const email = document.getElementById('login-email').value.trim();
   const pass = document.getElementById('login-pass').value;
@@ -1681,7 +1753,7 @@ window.doLogin = async function() {
     btn.textContent = 'Entrar'; btn.disabled = false;
   }
 };
-
+ 
 window.doRegister = async function() {
   const name = document.getElementById('reg-name').value.trim();
   const email = document.getElementById('reg-email').value.trim();
@@ -1698,7 +1770,7 @@ window.doRegister = async function() {
     btn.textContent = 'Crear cuenta'; btn.disabled = false;
   }
 };
-
+ 
 window.doGoogle = async function() {
   try {
     await window._fns.signInWithPopup(window._auth, window._provider);
@@ -1706,20 +1778,20 @@ window.doGoogle = async function() {
     showAuthError('Error con Google. Intenta de nuevo.');
   }
 };
-
+ 
 window.doLogout = async function() {
   if (!confirm('¿Cerrar sesión?')) return;
   if (unsubAvisos) unsubAvisos();
   if (unsubPresup) unsubPresup();
   await window._fns.signOut(window._auth);
 };
-
+ 
 function showAuthError(msg) {
   const el = document.getElementById('auth-error');
   el.textContent = msg;
   el.style.display = 'block';
 }
-
+ 
 function getAuthError(code) {
   const map = {
     'auth/user-not-found': 'No existe cuenta con ese correo',
@@ -1730,7 +1802,7 @@ function getAuthError(code) {
   };
   return map[code] || 'Error al iniciar sesión. Inténtalo de nuevo.';
 }
-
+ 
 // ─── NAVIGATION ───
 window.showPage = function(page, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1744,54 +1816,81 @@ window.showPage = function(page, btn) {
   if (page === 'calendario') renderCalendar();
   if (page === 'presupuestos') updateCobrosBanner();
 };
-
+ 
 // ─── MODAL ───
 window.openModal = function(id) {
+  if (id === 'modal-presup') {
+    const editId = document.getElementById('presup-edit-id').value;
+    if (!editId) {
+      // Resetting for new presupuesto
+      document.getElementById('presup-nombre').value = '';
+      document.getElementById('presup-cliente').value = '';
+      document.getElementById('presup-fecha').value = '';
+      document.getElementById('presup-descripcion').value = '';
+      document.getElementById('presup-precio-base').value = '';
+      document.getElementById('presup-total-preview').textContent = '0,00 €';
+      document.getElementById('iva-info-text').textContent = '';
+      presupLineCount = 0;
+      currentIva = 0;
+      document.querySelectorAll('.iva-btn').forEach((b,i) => {
+        b.style.background = i===0 ? 'var(--accent)' : 'transparent';
+        b.style.borderColor = i===0 ? 'var(--accent)' : 'var(--border)';
+        b.style.color = i===0 ? '#fff' : 'var(--text2)';
+      });
+      // Set today's date by default
+      const today = new Date().toISOString().slice(0,10);
+      document.getElementById('presup-fecha').value = today;
+      // Reset modal title
+      const titleEl = document.querySelector('#modal-presup .modal-title');
+      if (titleEl) titleEl.textContent = 'Nuevo presupuesto';
+    }
+  }
   document.getElementById(id).classList.add('open');
+  // Block pull-to-refresh while modal is open
+  document.body.style.overscrollBehaviorY = 'none';
 };
-
+ 
 window.closeModal = function(id) {
   document.getElementById(id).classList.remove('open');
+  // Re-enable pull-to-refresh only if no other modals are open
+  const anyOpen = document.querySelector('.modal-overlay.open');
+  if (!anyOpen) document.body.style.overscrollBehaviorY = '';
   if (id === 'modal-aviso') {
     document.getElementById('aviso-edit-id').value = '';
     document.getElementById('aviso-desc').value = '';
     document.getElementById('aviso-fecha').value = '';
-    document.getElementById('modal-aviso-title').textContent = 'Nuevo aviso';
+    document.getElementById('modal-aviso-title').textContent = 'Nueva tarea / recordatorio';
     document.querySelectorAll('.color-opt').forEach(c => c.classList.remove('selected'));
     document.querySelector('.color-opt[data-c="green"]').classList.add('selected');
     selectedAvisoColor = 'green';
   }
   if (id === 'modal-presup') {
+    // Clear edit id so next open is treated as new
     document.getElementById('presup-edit-id').value = '';
-    document.getElementById('presup-nombre').value = '';
-    document.getElementById('presup-cliente').value = '';
-    document.getElementById('presup-fecha').value = '';
-    document.getElementById('presup-descripcion').value = '';
-    document.getElementById('presup-precio-base').value = '';
-    document.getElementById('presup-total-preview').textContent = '0,00 €';
-    document.getElementById('iva-info-text').textContent = '';
-    presupLineCount = 0;
-    currentIva = 0;
-    document.querySelectorAll('.iva-btn').forEach((b,i) => {
-      b.style.background = i===0 ? 'var(--accent)' : 'transparent';
-      b.style.borderColor = i===0 ? 'var(--accent)' : 'var(--border)';
-      b.style.color = i===0 ? '#fff' : 'var(--text2)';
-    });
   }
 };
-
-// Click outside to close
+ 
+// Click outside to close - use mousedown to avoid conflicting with the add button click
 document.querySelectorAll('.modal-overlay').forEach(o => {
-  o.addEventListener('click', e => { if (e.target === o) closeModal(o.id); });
+  o.addEventListener('mousedown', e => {
+    if (e.target === o) closeModal(o.id);
+  });
+  // Block pull-to-refresh when touching inside modal
+  o.addEventListener('touchmove', e => {
+    if (o.classList.contains('open')) {
+      // Allow scroll inside .modal element, block on overlay backdrop
+      if (e.target === o) e.preventDefault();
+    }
+  }, { passive: false });
 });
-
+ 
 // ─── COLOR SELECTOR ───
 window.selectColor = function(el) {
   document.querySelectorAll('.color-opt').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
   selectedAvisoColor = el.dataset.c;
 };
-
+ 
 // ─── AVISOS ───
 function loadAvisos() {
   const { collection, query, orderBy, onSnapshot } = window._fns;
@@ -1803,70 +1902,69 @@ function loadAvisos() {
     renderCalendar();
   }, err => {
     console.error('Error cargando avisos:', err);
-    showToast('Error al cargar avisos');
+    showToast('Error al cargar tareas');
   });
 }
-
+ 
 function renderAvisos(filter) {
   if (!filter) filter = currentAvisoFilter;
   const list = document.getElementById('avisos-list');
   const searchQ = (document.getElementById('avisos-search')?.value || '').toLowerCase().trim();
-
+ 
   const today = new Date().toISOString().slice(0,10);
-
+ 
   let data;
   if (filter === 'completados') {
     data = allAvisos.filter(a => a.estado === 'resuelto');
   } else {
     data = allAvisos.filter(a => a.estado !== 'resuelto');
-    if (filter === 'sin-fecha') data = data.filter(a => !a.fecha);
   }
-
+ 
   // Apply search
   if (searchQ) {
     data = data.filter(a => a.desc.toLowerCase().includes(searchQ));
   }
-
+ 
   const total = allAvisos.filter(a => a.estado !== 'resuelto').length;
-  document.getElementById('avisos-count').textContent = total === 0 ? 'Sin avisos pendientes' : `${total} pendiente${total > 1 ? 's' : ''}`;
-
+  document.getElementById('avisos-count').textContent = total === 0 ? 'Sin tareas pendientes' : `${total} pendiente${total > 1 ? 's' : ''}`;
+ 
   // ─── OVERDUE & TODAY BANNERS (solo en pendientes) ───
   const overdueBanner = document.getElementById('avisos-overdue-banner');
   const todayBanner = document.getElementById('avisos-today-banner');
   overdueBanner.style.display = 'none';
   todayBanner.style.display = 'none';
-
+ 
   if (filter === 'pendiente' && !searchQ) {
     const overdue = allAvisos.filter(a => a.estado !== 'resuelto' && a.fecha && a.fecha < today);
     const todayAvisos = allAvisos.filter(a => a.estado !== 'resuelto' && a.fecha === today);
-
+ 
     if (overdue.length > 0) {
       overdueBanner.style.display = 'block';
       overdueBanner.innerHTML = `
         <div class="avisos-overdue-section">
           <div class="avisos-overdue-label">
-            <i class="fas fa-exclamation-circle"></i> Fecha vencida — ${overdue.length} aviso${overdue.length>1?'s':''}
+            <i class="fas fa-exclamation-circle"></i> Fecha vencida — ${overdue.length} tarea${overdue.length>1?'s':''}
             <button class="overdue-close" onclick="document.getElementById('avisos-overdue-banner').style.display='none'" title="Cerrar"><i class="fas fa-times"></i></button>
           </div>
           ${overdue.map(a => buildAvisoCardHTML(a, true)).join('')}
         </div>`;
     }
-
+ 
     if (todayAvisos.length > 0) {
       todayBanner.style.display = 'block';
       todayBanner.innerHTML = `
         <div class="avisos-today-section">
-          <div class="avisos-today-label"><i class="fas fa-calendar-day"></i> Para hoy — ${todayAvisos.length} aviso${todayAvisos.length>1?'s':''}</div>
+          <div class="avisos-today-label"><i class="fas fa-calendar-day"></i> Para hoy — ${todayAvisos.length} tarea${todayAvisos.length>1?'s':''}</div>
           ${todayAvisos.map(a => buildAvisoCardHTML(a, false)).join('')}
         </div>`;
     }
-
+ 
     // Remove overdue + today from main list
     const overdueIds = new Set(overdue.map(a=>a.id));
     const todayIds = new Set(todayAvisos.map(a=>a.id));
     data = data.filter(a => !overdueIds.has(a.id) && !todayIds.has(a.id));
   }
-
+ 
   // Sort: urgentes (red) primero, luego por fecha
   if (filter !== 'completados') {
     const urgent = data.filter(a => a.color === 'red');
@@ -1878,17 +1976,17 @@ function renderAvisos(filter) {
     };
     data = [...sortByDate(urgent), ...sortByDate(nonUrgent)];
   }
-
+ 
   if (data.length === 0 && overdueBanner.style.display === 'none' && todayBanner.style.display === 'none') {
-    list.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><p>No hay avisos aquí.</p></div>`;
+    list.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><p>No hay tareas aquí.</p></div>`;
     return;
   }
-
+ 
   const isCompletados = filter === 'completados';
   list.innerHTML = data.map(a => buildAvisoCardHTML(a, false, isCompletados)).join('');
   attachSwipeListeners();
 }
-
+ 
 function buildAvisoCardHTML(a, isOverdue, isCompletados) {
   const colorMap = { red: '#ef4444', green: '#22c55e', yellow: '#f59e0b', accent: 'var(--accent)' };
   const today = new Date().toISOString().slice(0,10);
@@ -1896,7 +1994,7 @@ function buildAvisoCardHTML(a, isOverdue, isCompletados) {
   const isHoy = a.fecha === today;
   const fechaLabel = a.fecha ? (isHoy ? '📅 Hoy' : `📅 ${formatFecha(a.fecha)}`) : '📌 Sin fecha';
   const overdueStyle = isOverdue ? 'border-left:3px solid var(--red);' : '';
-
+ 
   if (isCompletados) {
     return `
     <div class="swipe-wrapper" data-id="${a.id}" data-type="aviso-completado">
@@ -1916,7 +2014,7 @@ function buildAvisoCardHTML(a, isOverdue, isCompletados) {
       </div>
     </div>`;
   }
-
+ 
   return `
   <div class="swipe-wrapper" data-id="${a.id}" data-type="aviso">
     <div class="swipe-action-bg right"><i class="fas fa-check" style="margin-right:6px"></i> Resolver</div>
@@ -1936,33 +2034,33 @@ function buildAvisoCardHTML(a, isOverdue, isCompletados) {
     </div>
   </div>`;
 }
-
+ 
 window.filterAvisos = function(f, btn) {
   currentAvisoFilter = f;
   document.querySelectorAll('#page-avisos .chip').forEach(c => c.classList.remove('active'));
   btn.classList.add('active');
   renderAvisos(f);
 };
-
+ 
 window.saveAviso = async function() {
   const desc = document.getElementById('aviso-desc').value.trim();
-  if (!desc) return showToast('Escribe algo en el aviso');
+  if (!desc) return showToast('Escribe algo en la tarea');
   if (!currentUser) return showToast('Error: no hay sesión activa');
   const fecha = document.getElementById('aviso-fecha').value;
   const editId = document.getElementById('aviso-edit-id').value;
   const { collection, addDoc, doc, updateDoc, serverTimestamp } = window._fns;
   const db = window._db;
-
+ 
   try {
     vibrate();
     if (editId) {
       await updateDoc(doc(db, 'users', currentUser.uid, 'avisos', editId), { desc, fecha, color: selectedAvisoColor });
-      showToast('Aviso actualizado ✓');
+      showToast('Tarea actualizada ✓');
     } else {
       await addDoc(collection(db, 'users', currentUser.uid, 'avisos'), {
         desc, fecha, color: selectedAvisoColor, estado: 'pendiente', createdAt: serverTimestamp()
       });
-      showToast('Aviso guardado ✓');
+      showToast('Tarea guardada ✓');
     }
     closeModal('modal-aviso');
   } catch(e) {
@@ -1973,61 +2071,85 @@ window.saveAviso = async function() {
     showToast(msg, 6000);
   }
 };
-
+ 
 window.editAviso = function(id) {
   const a = allAvisos.find(x => x.id === id);
   if (!a) return;
   document.getElementById('aviso-edit-id').value = id;
   document.getElementById('aviso-desc').value = a.desc;
   document.getElementById('aviso-fecha').value = a.fecha || '';
-  document.getElementById('modal-aviso-title').textContent = 'Editar aviso';
+  document.getElementById('modal-aviso-title').textContent = 'Editar tarea';
   document.querySelectorAll('.color-opt').forEach(c => c.classList.remove('selected'));
   const colorEl = document.querySelector(`.color-opt[data-c="${a.color || 'green'}"]`);
   if (colorEl) colorEl.classList.add('selected');
   selectedAvisoColor = a.color || 'green';
   openModal('modal-aviso');
 };
-
+ 
 window.resolverAviso = async function(id) {
   const { doc, updateDoc } = window._fns;
   await updateDoc(doc(window._db, 'users', currentUser.uid, 'avisos', id), { estado: 'resuelto' });
   vibrate();
-  showToast('Aviso resuelto ✓');
+  showToast('Tarea completada ✓');
 };
-
+ 
 window.eliminarAviso = async function(id) {
   if (!confirm('¿Eliminar este aviso?')) return;
   const { doc, deleteDoc } = window._fns;
   await deleteDoc(doc(window._db, 'users', currentUser.uid, 'avisos', id));
-  showToast('Aviso eliminado');
+  showToast('Tarea eliminada');
 };
-
+ 
 // ─── DETAIL AVISO ───
 window.openAvisoDetail = function(id) {
   const a = allAvisos.find(x => x.id === id);
   if (!a) return;
   detailAvisoId = id;
+  const isCompletado = a.estado === 'resuelto';
   document.getElementById('aviso-detail-title').textContent = a.desc.split('\n')[0].substring(0,50);
   document.getElementById('aviso-detail-content').textContent = a.desc;
-  document.getElementById('aviso-detail-fecha').textContent = a.fecha ? `Fecha: ${formatFecha(a.fecha)}` : 'Sin fecha asignada';
+  document.getElementById('aviso-detail-fecha').textContent = a.fecha ? `📅 Fecha: ${formatFecha(a.fecha)}` : 'Sin fecha asignada';
+ 
+  // Render state-aware action buttons
+  const actionsEl = document.getElementById('aviso-detail-actions');
+  if (isCompletado) {
+    actionsEl.innerHTML = `
+      <button class="btn-modal-save" style="background:var(--yellow);box-shadow:none" onclick="restaurarAvisoFromDetail()"><i class="fas fa-undo"></i> Restaurar</button>
+      <button class="btn-sec" style="color:var(--red);border-color:rgba(239,68,68,0.3)" onclick="eliminarAvisoFromDetail()"><i class="fas fa-trash"></i> Eliminar</button>
+      <button class="btn-sec" onclick="closeModal('modal-aviso-detail')">Cerrar</button>
+    `;
+  } else {
+    actionsEl.innerHTML = `
+      <button class="btn-sec" onclick="editAvisoFromDetail()"><i class="fas fa-pen"></i> Editar</button>
+      <button class="btn-modal-save" onclick="resolverAvisoFromDetail()"><i class="fas fa-check"></i> Completar</button>
+      <button class="btn-sec" style="color:var(--red);border-color:rgba(239,68,68,0.3)" onclick="eliminarAvisoFromDetail()"><i class="fas fa-trash"></i> Eliminar</button>
+      <button class="btn-sec" onclick="closeModal('modal-aviso-detail')">Cerrar</button>
+    `;
+  }
+ 
   openModal('modal-aviso-detail');
 };
-
+ 
 window.editAvisoFromDetail = function() {
   closeModal('modal-aviso-detail');
   editAviso(detailAvisoId);
 };
-
+ 
 window.resolverAvisoFromDetail = function() {
   closeModal('modal-aviso-detail');
   resolverAviso(detailAvisoId);
 };
-
+ 
+window.restaurarAvisoFromDetail = function() {
+  closeModal('modal-aviso-detail');
+  restaurarAviso(detailAvisoId);
+};
+ 
 window.eliminarAvisoFromDetail = function() {
   closeModal('modal-aviso-detail');
   eliminarAviso(detailAvisoId);
 };
-
+ 
 // ─── PRESUPUESTOS ───
 function loadPresupuestos() {
   const { collection, query, orderBy, onSnapshot } = window._fns;
@@ -2042,14 +2164,14 @@ function loadPresupuestos() {
     showToast('Error al cargar presupuestos');
   });
 }
-
+ 
 function renderPresupuestos(filter) {
   if (!filter) filter = currentPresupFilter;
   const list = document.getElementById('presup-list');
   const searchQ = (document.getElementById('presup-search')?.value || '').toLowerCase().trim();
-
+ 
   let data = allPresupuestos;
-
+ 
   if (filter === 'cobrado') {
     data = data.filter(p => p.cobrado === true);
   } else if (filter === 'pendiente') {
@@ -2059,94 +2181,78 @@ function renderPresupuestos(filter) {
   } else if (filter === 'rechazado') {
     data = data.filter(p => p.estado === 'rechazado');
   }
-
+ 
   if (searchQ) {
     data = data.filter(p =>
       (p.nombre||'').toLowerCase().includes(searchQ) ||
       (p.cliente||'').toLowerCase().includes(searchQ)
     );
   }
-
+ 
   if (data.length === 0) {
     list.innerHTML = `<div class="empty-state"><i class="fas fa-file-invoice"></i><p>No hay presupuestos aquí.</p></div>`;
     return;
   }
-
+ 
   const stateColor = { pendiente: 'var(--yellow)', aceptado: 'var(--green)', rechazado: 'var(--red)' };
   const stateBg = { pendiente: 'rgba(245,158,11,0.12)', aceptado: 'rgba(34,197,94,0.12)', rechazado: 'rgba(239,68,68,0.12)' };
-
+ 
   const isRestoreable = filter === 'rechazado' || filter === 'cobrado';
-
+ 
   list.innerHTML = data.map(p => {
     const total = p.total !== undefined ? p.total : 0;
     const badgeLabel = p.cobrado ? 'Cobrado' : (p.estado ? p.estado.charAt(0).toUpperCase()+p.estado.slice(1) : 'Pendiente');
     const badgeColor = p.cobrado ? 'var(--green)' : (stateColor[p.estado] || 'var(--text2)');
     const badgeBg = p.cobrado ? 'rgba(34,197,94,0.12)' : (stateBg[p.estado] || 'transparent');
-
+ 
+    const cardInner = `
+          <div class="presup-card" onclick="openPresupDetail('${p.id}')">
+            <div class="presup-top">
+              <span class="presup-num">PRES-${String(p.num||1).padStart(3,'0')}</span>
+              <span class="presup-badge" style="background:${badgeBg};color:${badgeColor}">${badgeLabel}</span>
+            </div>
+            <div class="presup-nombre">${escHtml(p.nombre||'')}</div>
+            <div class="presup-cliente"><i class="fas fa-user" style="font-size:0.7rem;margin-right:4px"></i>${escHtml(p.cliente||'')}</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
+              <div class="presup-total" style="margin-top:0">${formatEuro(total)}</div>
+              <button onclick="event.stopPropagation();generarPDF('${p.id}')" style="padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--text2);font-family:'Plus Jakarta Sans',sans-serif;font-size:0.72rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.2s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text2)'"><i class="fas fa-file-pdf" style="font-size:0.7rem"></i> PDF</button>
+            </div>
+          </div>`;
+ 
     if (isRestoreable) {
       return `
       <div class="swipe-wrapper" data-id="${p.id}" data-type="presup-restore">
         <div class="swipe-action-bg left swipe-restore-bg"><i class="fas fa-undo" style="margin-right:6px"></i> Restaurar a pendiente</div>
-        <div class="swipe-card-inner">
-          <div class="presup-card" onclick="openPresupDetail('${p.id}')">
-            <div class="presup-top">
-              <span class="presup-num">PRES-${String(p.num||1).padStart(3,'0')}</span>
-              <span class="presup-badge" style="background:${badgeBg};color:${badgeColor}">${badgeLabel}</span>
-            </div>
-            <div class="presup-nombre">${escHtml(p.nombre||'')}</div>
-            <div class="presup-cliente"><i class="fas fa-user" style="font-size:0.7rem;margin-right:4px"></i>${escHtml(p.cliente||'')}</div>
-            <div class="presup-total">${formatEuro(total)}</div>
-          </div>
-        </div>
+        <div class="swipe-card-inner">${cardInner}</div>
       </div>`;
     }
-
+ 
     if (filter === 'aceptado') {
       return `
       <div class="swipe-wrapper" data-id="${p.id}" data-type="presup-cobrar">
         <div class="swipe-action-bg right" style="background:var(--green)"><i class="fas fa-coins" style="margin-right:6px"></i> Marcar cobrado</div>
-        <div class="swipe-card-inner">
-          <div class="presup-card" onclick="openPresupDetail('${p.id}')">
-            <div class="presup-top">
-              <span class="presup-num">PRES-${String(p.num||1).padStart(3,'0')}</span>
-              <span class="presup-badge" style="background:${badgeBg};color:${badgeColor}">${badgeLabel}</span>
-            </div>
-            <div class="presup-nombre">${escHtml(p.nombre||'')}</div>
-            <div class="presup-cliente"><i class="fas fa-user" style="font-size:0.7rem;margin-right:4px"></i>${escHtml(p.cliente||'')}</div>
-            <div class="presup-total">${formatEuro(total)}</div>
-          </div>
-        </div>
+        <div class="swipe-card-inner">${cardInner}</div>
       </div>`;
     }
-
+ 
     // Pendientes: swipe derecha = aceptar
     return `
     <div class="swipe-wrapper" data-id="${p.id}" data-type="presup-aceptar">
       <div class="swipe-action-bg right" style="background:var(--green)"><i class="fas fa-thumbs-up" style="margin-right:6px"></i> Aceptar</div>
-      <div class="swipe-card-inner">
-        <div class="presup-card" onclick="openPresupDetail('${p.id}')">
-          <div class="presup-top">
-            <span class="presup-num">PRES-${String(p.num||1).padStart(3,'0')}</span>
-            <span class="presup-badge" style="background:${badgeBg};color:${badgeColor}">${badgeLabel}</span>
-          </div>
-          <div class="presup-nombre">${escHtml(p.nombre||'')}</div>
-          <div class="presup-cliente"><i class="fas fa-user" style="font-size:0.7rem;margin-right:4px"></i>${escHtml(p.cliente||'')}</div>
-          <div class="presup-total">${formatEuro(total)}</div>
-        </div>
-      </div>
+      <div class="swipe-card-inner">${cardInner}</div>
     </div>`;
   }).join('');
-
+ 
   attachSwipeListeners();
 }
-
+ 
 window.filterPresup = function(f, btn) {
   currentPresupFilter = f;
   document.querySelectorAll('#page-presupuestos .chip').forEach(c => c.classList.remove('active'));
   btn.classList.add('active');
   renderPresupuestos(f);
 };
-
+ 
 // ─── IVA (simple, sobre precio total) ───
 window.applyIva = function(pct) {
   currentIva = pct;
@@ -2164,7 +2270,7 @@ window.applyIva = function(pct) {
   }
   updatePresupTotalSimple();
 };
-
+ 
 window.updatePresupTotalSimple = function() {
   const base = parseFloat(document.getElementById('presup-precio-base')?.value) || 0;
   const ivaAmount = base * (currentIva / 100);
@@ -2178,12 +2284,12 @@ window.updatePresupTotalSimple = function() {
     document.getElementById('presup-total-preview').textContent = formatEuro(base);
   }
 };
-
+ 
 // mantener calcTotal por compatibilidad con datos antiguos
 function calcTotal(lineas) {
   return (lineas || []).reduce((sum, l) => sum + ((l.qty||1) * (l.price||0)), 0);
 }
-
+ 
 window.savePresup = async function() {
   const nombre = document.getElementById('presup-nombre').value.trim();
   const cliente = document.getElementById('presup-cliente').value.trim();
@@ -2219,7 +2325,7 @@ window.savePresup = async function() {
     showToast(msg, 6000);
   }
 };
-
+ 
 // ─── PRESUP DETAIL ───
 window.openPresupDetail = function(id) {
   const p = allPresupuestos.find(x => x.id === id);
@@ -2229,7 +2335,7 @@ window.openPresupDetail = function(id) {
   const base = p.precioBase !== undefined ? p.precioBase : calcTotal(p.lineas || []);
   const stateLabel = p.cobrado ? 'Cobrado' : (p.estado ? p.estado.charAt(0).toUpperCase()+p.estado.slice(1) : 'Pendiente');
   const stateColor = p.cobrado ? 'var(--green)' : { pendiente: 'var(--yellow)', aceptado: 'var(--green)', rechazado: 'var(--red)' }[p.estado] || 'var(--text2)';
-
+ 
   document.getElementById('presup-detail-inner').innerHTML = `
     <div class="modal-handle"></div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
@@ -2258,7 +2364,7 @@ window.openPresupDetail = function(id) {
     </div>` : ''}
     ${p.cobrado ? `<div style="margin-top:14px;text-align:center;font-size:0.85rem;color:var(--green);font-weight:600"><i class="fas fa-check-circle"></i> Cobrado</div>` : ''}
   `;
-
+ 
   const actions = document.getElementById('presup-detail-actions');
   actions.innerHTML = `
     <button class="btn-sec" onclick="editPresup('${id}')"><i class="fas fa-pen"></i> Editar</button>
@@ -2269,10 +2375,10 @@ window.openPresupDetail = function(id) {
     <button class="btn-sec" style="color:var(--red);border-color:rgba(239,68,68,0.3)" onclick="eliminarPresup('${id}')"><i class="fas fa-trash"></i></button>
     <button class="btn-sec" onclick="closeModal('modal-presup-detail')">Cerrar</button>
   `;
-
+ 
   openModal('modal-presup-detail');
 };
-
+ 
 window.marcarCobrado = async function(id) {
   const { doc, updateDoc } = window._fns;
   await updateDoc(doc(window._db, 'users', currentUser.uid, 'presupuestos', id), { cobrado: true });
@@ -2280,7 +2386,7 @@ window.marcarCobrado = async function(id) {
   showToast('Marcado como cobrado ✓');
   closeModal('modal-presup-detail');
 };
-
+ 
 window.restaurarACobrado = async function(id) {
   const { doc, updateDoc } = window._fns;
   await updateDoc(doc(window._db, 'users', currentUser.uid, 'presupuestos', id), { cobrado: false, estado: 'aceptado' });
@@ -2288,28 +2394,27 @@ window.restaurarACobrado = async function(id) {
   showToast('Restaurado a aceptados');
   closeModal('modal-presup-detail');
 };
-
+ 
 window.changePresupEstado = async function(id, estado) {
   const { doc, updateDoc } = window._fns;
   await updateDoc(doc(window._db, 'users', currentUser.uid, 'presupuestos', id), { estado });
   showToast(`Presupuesto marcado como ${estado}`);
   closeModal('modal-presup-detail');
 };
-
+ 
 window.editPresup = function(id) {
   const p = allPresupuestos.find(x => x.id === id);
   if (!p) return;
   closeModal('modal-presup-detail');
+  // Set the edit id BEFORE opening so openModal knows it's an edit
   document.getElementById('presup-edit-id').value = id;
   document.getElementById('presup-nombre').value = p.nombre || '';
   document.getElementById('presup-cliente').value = p.cliente || '';
   document.getElementById('presup-fecha').value = p.fecha || '';
   document.getElementById('presup-descripcion').value = p.descripcion || '';
-  // Precio base: puede venir de precioBase o de calcTotal de lineas antiguas
   const base = p.precioBase !== undefined ? p.precioBase : calcTotal(p.lineas || []);
   document.getElementById('presup-precio-base').value = base || '';
   currentIva = p.iva || 0;
-  // Resetear botones IVA
   document.querySelectorAll('.iva-btn').forEach(b => {
     b.style.background = 'transparent';
     b.style.borderColor = 'var(--border)';
@@ -2323,9 +2428,11 @@ window.editPresup = function(id) {
     btns[ivaMap[currentIva]].style.color = '#fff';
   }
   updatePresupTotalSimple();
+  const titleEl = document.querySelector('#modal-presup .modal-title');
+  if (titleEl) titleEl.textContent = 'Editar presupuesto';
   openModal('modal-presup');
 };
-
+ 
 window.eliminarPresup = async function(id) {
   if (!confirm('¿Eliminar este presupuesto?')) return;
   closeModal('modal-presup-detail');
@@ -2333,15 +2440,15 @@ window.eliminarPresup = async function(id) {
   await deleteDoc(doc(window._db, 'users', currentUser.uid, 'presupuestos', id));
   showToast('Presupuesto eliminado');
 };
-
+ 
 // ─── RESTAURAR AVISO ───
 window.restaurarAviso = async function(id) {
   const { doc, updateDoc } = window._fns;
   await updateDoc(doc(window._db, 'users', currentUser.uid, 'avisos', id), { estado: 'pendiente' });
   vibrate();
-  showToast('Aviso restaurado');
+  showToast('Tarea restaurada ✓');
 };
-
+ 
 // ─── RESTAURAR PRESUP A PENDIENTE ───
 window.restaurarPresupAPendiente = async function(id) {
   const { doc, updateDoc } = window._fns;
@@ -2349,7 +2456,7 @@ window.restaurarPresupAPendiente = async function(id) {
   vibrate();
   showToast('Restaurado a pendientes');
 };
-
+ 
 // ─── PDF PROFESIONAL ───
 window.generarPDF = function(id) {
   const p = allPresupuestos.find(x => x.id === id);
@@ -2357,110 +2464,184 @@ window.generarPDF = function(id) {
   const total = p.total !== undefined ? p.total : 0;
   const base = p.precioBase !== undefined ? p.precioBase : calcTotal(p.lineas || []);
   const ivaAmount = p.iva > 0 ? base * p.iva / 100 : 0;
-
-  // Obtener color accent del usuario
+ 
   const accentMap = {
     blue: '#2563eb', teal: '#0d9488', violet: '#7c3aed', rose: '#e11d48', amber: '#d97706'
   };
   const savedAccent = localStorage.getItem('rtm-accent') || 'blue';
   const accentColor = accentMap[savedAccent] || '#2563eb';
-
+  // Generate a lighter version for backgrounds
+  const accentAlpha = accentColor + '18';
+ 
+  const userName = currentUser?.displayName || 'RelajaTuMente';
+ 
   const w = window.open('', '_blank');
+  if (!w) { showToast('Activa las ventanas emergentes para generar el PDF'); return; }
   w.document.write(`<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <title>Presupuesto PRES-${String(p.num||1).padStart(3,'0')}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'Plus Jakarta Sans',Arial,sans-serif; background:#f8fafc; color:#1e293b; padding:0; }
-  .page { max-width:780px; margin:0 auto; background:#fff; min-height:100vh; position:relative; }
-  .header { background:${accentColor}; padding:40px 48px 36px; color:#fff; position:relative; overflow:hidden; }
-  .header::after { content:''; position:absolute; top:-60px; right:-60px; width:220px; height:220px; border-radius:50%; background:rgba(255,255,255,0.07); }
-  .header::before { content:''; position:absolute; bottom:-80px; right:80px; width:160px; height:160px; border-radius:50%; background:rgba(255,255,255,0.05); }
+  body { font-family:'Inter',Arial,sans-serif; background:#f0f4f8; color:#1e293b; }
+  .wrapper { max-width:800px; margin:0 auto; background:#fff; min-height:100vh; box-shadow:0 0 40px rgba(0,0,0,0.12); }
+ 
+  /* HEADER */
+  .header { background:${accentColor}; padding:44px 52px 40px; color:#fff; position:relative; overflow:hidden; }
+  .header-orb1 { position:absolute; top:-80px; right:-80px; width:260px; height:260px; border-radius:50%; background:rgba(255,255,255,0.06); }
+  .header-orb2 { position:absolute; bottom:-100px; right:100px; width:180px; height:180px; border-radius:50%; background:rgba(255,255,255,0.04); }
+  .header-orb3 { position:absolute; top:20px; left:240px; width:100px; height:100px; border-radius:50%; background:rgba(255,255,255,0.05); }
   .header-top { display:flex; justify-content:space-between; align-items:flex-start; position:relative; z-index:1; }
-  .empresa-nombre { font-size:1.6rem; font-weight:700; letter-spacing:-0.5px; }
-  .presup-num-badge { background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.3); border-radius:8px; padding:6px 14px; font-size:0.82rem; font-weight:600; letter-spacing:0.5px; }
-  .header-title { font-size:2.6rem; font-weight:700; letter-spacing:-1px; margin-top:20px; position:relative; z-index:1; opacity:0.97; }
-  .body { padding:40px 48px; }
-  .meta-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:36px; }
-  .meta-block { }
-  .meta-label { font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#94a3b8; margin-bottom:6px; }
-  .meta-value { font-size:0.95rem; font-weight:600; color:#1e293b; }
-  .meta-value.large { font-size:1.05rem; }
-  .divider { height:1px; background:#e2e8f0; margin-bottom:28px; }
-  .descripcion-box { background:#f8fafc; border-left:3px solid ${accentColor}; border-radius:0 8px 8px 0; padding:16px 20px; margin-bottom:32px; font-size:0.9rem; color:#475569; line-height:1.7; white-space:pre-wrap; }
-  .totales { margin-top:24px; }
-  .totales-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #f1f5f9; font-size:0.9rem; color:#64748b; }
-  .totales-row:last-child { border-bottom:none; }
-  .totales-final { display:flex; justify-content:space-between; align-items:center; background:${accentColor}; color:#fff; border-radius:12px; padding:18px 24px; margin-top:16px; }
-  .totales-final-label { font-size:1rem; font-weight:600; }
-  .totales-final-amount { font-size:1.8rem; font-weight:700; letter-spacing:-0.5px; }
-  .footer { border-top:1px solid #e2e8f0; padding:24px 48px; display:flex; justify-content:space-between; align-items:center; margin-top:40px; }
-  .footer-note { font-size:0.78rem; color:#94a3b8; }
-  .pdf-btn { position:fixed; bottom:24px; right:24px; background:${accentColor}; color:#fff; border:none; border-radius:50px; padding:14px 28px; font-size:0.95rem; font-weight:600; cursor:pointer; box-shadow:0 4px 20px rgba(0,0,0,0.2); display:flex; align-items:center; gap:8px; font-family:'Plus Jakarta Sans',sans-serif; z-index:999; }
-  .pdf-btn:hover { opacity:0.92; }
+  .empresa { font-size:1.5rem; font-weight:800; letter-spacing:-0.5px; }
+  .pres-badge { background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.25); border-radius:8px; padding:6px 16px; font-size:0.82rem; font-weight:600; letter-spacing:0.8px; text-transform:uppercase; }
+  .header-title { font-size:3rem; font-weight:800; letter-spacing:-1.5px; margin-top:24px; position:relative; z-index:1; line-height:1; }
+  .header-sub { font-size:0.9rem; opacity:0.75; margin-top:8px; position:relative; z-index:1; font-weight:300; }
+ 
+  /* BODY */
+  .body { padding:44px 52px; }
+ 
+  /* META GRID */
+  .meta-grid { display:grid; grid-template-columns:1fr 1fr; gap:0; margin-bottom:36px; border:1px solid #e8edf2; border-radius:12px; overflow:hidden; }
+  .meta-cell { padding:18px 22px; border-right:1px solid #e8edf2; border-bottom:1px solid #e8edf2; }
+  .meta-cell:nth-child(2n) { border-right:none; }
+  .meta-cell:nth-child(3), .meta-cell:nth-child(4) { border-bottom:none; }
+  .meta-label { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:#94a3b8; margin-bottom:6px; }
+  .meta-value { font-size:0.97rem; font-weight:600; color:#1e293b; line-height:1.3; }
+  .meta-value.accent { color:${accentColor}; }
+ 
+  /* DIVIDER */
+  .section-label { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:#94a3b8; margin-bottom:14px; padding-bottom:8px; border-bottom:2px solid #f1f5f9; }
+ 
+  /* DESCRIPCION */
+  .desc-box { background:#f8fafc; border-left:3px solid ${accentColor}; border-radius:0 10px 10px 0; padding:18px 22px; margin-bottom:36px; font-size:0.9rem; color:#475569; line-height:1.75; white-space:pre-wrap; }
+ 
+  /* TOTALES */
+  .totales-section { margin-top:8px; }
+  .totales-row { display:flex; justify-content:space-between; align-items:center; padding:12px 20px; border-radius:8px; font-size:0.9rem; margin-bottom:4px; }
+  .totales-row.bg { background:#f8fafc; }
+  .totales-row .label { color:#64748b; font-weight:500; }
+  .totales-row .amount { color:#1e293b; font-weight:600; }
+  .totales-final { display:flex; justify-content:space-between; align-items:center; background:${accentColor}; color:#fff; border-radius:12px; padding:20px 24px; margin-top:12px; }
+  .totales-final .label { font-size:1rem; font-weight:600; opacity:0.9; }
+  .totales-final .amount { font-size:2rem; font-weight:800; letter-spacing:-0.5px; }
+ 
+  /* FOOTER */
+  .footer { display:flex; justify-content:space-between; align-items:center; padding:24px 52px; border-top:1px solid #e8edf2; margin-top:48px; }
+  .footer-left { font-size:0.78rem; color:#94a3b8; }
+  .footer-right { font-size:0.78rem; color:#94a3b8; text-align:right; }
+  .footer-ref { font-weight:600; color:#64748b; }
+ 
+  /* PDF BUTTON */
+  .pdf-btn {
+    position:fixed; bottom:24px; right:24px;
+    background:${accentColor}; color:#fff;
+    border:none; border-radius:50px;
+    padding:14px 28px; font-size:0.95rem; font-weight:600;
+    cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,0.2);
+    display:flex; align-items:center; gap:10px;
+    font-family:'Inter',sans-serif; z-index:999;
+    transition:opacity 0.2s;
+  }
+  .pdf-btn:hover { opacity:0.9; }
+ 
+  @page { margin: 0; }
   @media print {
     body { background:#fff; }
     .pdf-btn { display:none !important; }
-    .page { box-shadow:none; }
+    .wrapper { box-shadow:none; max-width:none; }
+    @page { size: A4; margin: 0; }
   }
 </style>
 </head>
 <body>
-<button class="pdf-btn" onclick="window.print()">⬇ Guardar PDF</button>
-<div class="page">
+<button class="pdf-btn" onclick="window.print()">
+  <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+  Guardar como PDF
+</button>
+<div class="wrapper">
   <div class="header">
+    <div class="header-orb1"></div>
+    <div class="header-orb2"></div>
+    <div class="header-orb3"></div>
     <div class="header-top">
-      <div class="empresa-nombre">RelajaTuMente</div>
-      <div class="presup-num-badge">PRES-${String(p.num||1).padStart(3,'0')}</div>
+      <div class="empresa">${escHtml(userName)}</div>
+      <div class="pres-badge">PRES-${String(p.num||1).padStart(3,'0')}</div>
     </div>
     <div class="header-title">Presupuesto</div>
+    <div class="header-sub">Documento generado el ${new Date().toLocaleDateString('es-ES', {day:'numeric',month:'long',year:'numeric'})}</div>
   </div>
   <div class="body">
     <div class="meta-grid">
-      <div class="meta-block">
+      <div class="meta-cell">
         <div class="meta-label">Cliente</div>
-        <div class="meta-value large">${escHtml(p.cliente||'—')}</div>
+        <div class="meta-value">${escHtml(p.cliente||'—')}</div>
       </div>
-      <div class="meta-block">
-        <div class="meta-label">Fecha</div>
-        <div class="meta-value">${p.fecha ? formatFecha(p.fecha) : 'Sin fecha'}</div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha del presupuesto</div>
+        <div class="meta-value">${p.fecha ? formatFecha(p.fecha) : '—'}</div>
       </div>
-      <div class="meta-block">
-        <div class="meta-label">Trabajo</div>
-        <div class="meta-value">${escHtml(p.nombre||'')}</div>
+      <div class="meta-cell">
+        <div class="meta-label">Trabajo / Descripción breve</div>
+        <div class="meta-value">${escHtml(p.nombre||'—')}</div>
       </div>
-      <div class="meta-block">
+      <div class="meta-cell">
         <div class="meta-label">Estado</div>
-        <div class="meta-value" style="color:${accentColor}">${p.cobrado ? 'Cobrado' : (p.estado ? p.estado.charAt(0).toUpperCase()+p.estado.slice(1) : 'Pendiente')}</div>
+        <div class="meta-value accent">${p.cobrado ? 'Cobrado' : (p.estado ? p.estado.charAt(0).toUpperCase()+p.estado.slice(1) : 'Pendiente')}</div>
       </div>
     </div>
-    <div class="divider"></div>
+ 
     ${p.descripcion ? `
-    <div class="meta-label" style="margin-bottom:10px">Descripción del trabajo</div>
-    <div class="descripcion-box">${escHtml(p.descripcion)}</div>` : ''}
-    <div class="totales">
+    <div class="section-label">Descripción del trabajo</div>
+    <div class="desc-box">${escHtml(p.descripcion)}</div>
+    ` : ''}
+ 
+    <div class="section-label">Desglose económico</div>
+    <div class="totales-section">
       ${p.iva > 0 ? `
-      <div class="totales-row"><span>Base imponible</span><span style="font-weight:600;color:#1e293b;">${formatEuro(base)}</span></div>
-      <div class="totales-row"><span>IVA ${p.iva}%</span><span style="font-weight:600;color:#1e293b;">${formatEuro(ivaAmount)}</span></div>
-      ` : `<div class="totales-row"><span>Importe</span><span style="font-weight:600;color:#1e293b;">${formatEuro(base)}</span></div>`}
+      <div class="totales-row bg">
+        <span class="label">Base imponible</span>
+        <span class="amount">${formatEuro(base)}</span>
+      </div>
+      <div class="totales-row bg">
+        <span class="label">IVA (${p.iva}%)</span>
+        <span class="amount">${formatEuro(ivaAmount)}</span>
+      </div>
+      ` : `
+      <div class="totales-row bg">
+        <span class="label">Importe neto</span>
+        <span class="amount">${formatEuro(base)}</span>
+      </div>
+      `}
       <div class="totales-final">
-        <div class="totales-final-label">TOTAL${p.iva > 0 ? ' (IVA incluido)' : ''}</div>
-        <div class="totales-final-amount">${formatEuro(total)}</div>
+        <span class="label">TOTAL ${p.iva > 0 ? '(IVA incluido)' : '(sin IVA)'}</span>
+        <span class="amount">${formatEuro(total)}</span>
       </div>
     </div>
   </div>
   <div class="footer">
-    <div class="footer-note">Presupuesto generado con RelajaTuMente</div>
-    <div class="footer-note">PRES-${String(p.num||1).padStart(3,'0')} · ${p.fecha || ''}</div>
+    <div class="footer-left">
+      <div>${escHtml(userName)}</div>
+      <div>Presupuesto generado con RelajaTuMente</div>
+    </div>
+    <div class="footer-right">
+      <div class="footer-ref">Ref: PRES-${String(p.num||1).padStart(3,'0')}</div>
+      <div>${p.fecha || ''}</div>
+    </div>
   </div>
 </div>
+<script>
+  // Auto open print dialog after fonts load
+  window.addEventListener('load', function() {
+    setTimeout(function() { window.print(); }, 800);
+  });
+<\/script>
 </body></html>`);
   w.document.close();
 };
-
+ 
 // ─── SWIPE LISTENERS ───
 function attachSwipeListeners() {
   document.querySelectorAll('.swipe-wrapper').forEach(wrapper => {
@@ -2468,16 +2649,16 @@ function attachSwipeListeners() {
     const type = wrapper.dataset.type;
     const id = wrapper.dataset.id;
     if (!inner || !id) return;
-
+ 
     let startX = 0, currentX = 0, isDragging = false;
     const THRESHOLD = 90;
-
+ 
     inner.addEventListener('touchstart', e => {
       startX = e.touches[0].clientX;
       isDragging = true;
       inner.classList.add('swiping');
     }, { passive: true });
-
+ 
     inner.addEventListener('touchmove', e => {
       if (!isDragging) return;
       currentX = e.touches[0].clientX - startX;
@@ -2495,12 +2676,12 @@ function attachSwipeListeners() {
       if (rightBg) rightBg.style.opacity = Math.min(1, currentX / THRESHOLD);
       if (leftBg) leftBg.style.opacity = Math.min(1, -currentX / THRESHOLD);
     }, { passive: true });
-
+ 
     inner.addEventListener('touchend', async () => {
       if (!isDragging) return;
       isDragging = false;
       inner.classList.remove('swiping');
-
+ 
       if (Math.abs(currentX) >= THRESHOLD) {
         // Animar salida
         inner.style.transform = `translateX(${currentX > 0 ? '110%' : '-110%'})`;
@@ -2525,7 +2706,7 @@ function attachSwipeListeners() {
     });
   });
 }
-
+ 
 // ─── COBROS BANNER ───
 function updateCobrosBanner() {
   const banner = document.getElementById('cobros-banner');
@@ -2546,79 +2727,79 @@ function updateCobrosBanner() {
     </div>
   `;
 }
-
+ 
 // ─── CALENDARIO ───
 function renderCalendar() {
   const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   document.getElementById('cal-month-label').textContent = `${months[calMonth]} ${calYear}`;
-
+ 
   const days = ['L','M','X','J','V','S','D'];
   const today = new Date();
   const grid = document.getElementById('cal-grid');
-
+ 
   const avisoDates = new Set(allAvisos.filter(a => a.fecha && a.estado !== 'resuelto').map(a => a.fecha));
-
+ 
   let html = days.map(d => `<div class="cal-day-header">${d}</div>`).join('');
-
+ 
   const firstDay = new Date(calYear, calMonth, 1);
   let startDow = firstDay.getDay();
   startDow = startDow === 0 ? 6 : startDow - 1;
-
+ 
   const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
   const prevDays = new Date(calYear, calMonth, 0).getDate();
-
+ 
   for (let i = 0; i < startDow; i++) {
     const d = prevDays - startDow + 1 + i;
     html += `<div class="cal-day other-month">${d}</div>`;
   }
-
+ 
   for (let d = 1; d <= daysInMonth; d++) {
     const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     const isToday = d === today.getDate() && calMonth === today.getMonth() && calYear === today.getFullYear();
     const hasAvisos = avisoDates.has(dateStr);
     html += `<div class="cal-day ${isToday?'today':''} ${hasAvisos?'has-avisos':''}" onclick="selectCalDay('${dateStr}',this)">${d}</div>`;
   }
-
+ 
   const remaining = 42 - startDow - daysInMonth;
   for (let i = 1; i <= remaining; i++) {
     html += `<div class="cal-day other-month">${i}</div>`;
   }
-
+ 
   grid.innerHTML = html;
 }
-
+ 
 window.openModalWithDate = function(date) {
   openModal('modal-aviso');
   setTimeout(() => {
     document.getElementById('aviso-fecha').value = date;
   }, 50);
 };
-
+ 
 window.changeMonth = function(dir) {
   calMonth += dir;
   if (calMonth > 11) { calMonth = 0; calYear++; }
   if (calMonth < 0) { calMonth = 11; calYear--; }
   renderCalendar();
 };
-
+ 
 window.selectCalDay = function(date, el) {
   document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
   el.classList.add('selected');
-
+ 
   const dayAvisos = allAvisos.filter(a => a.fecha === date && a.estado !== 'resuelto');
   const container = document.getElementById('cal-day-avisos');
   const colorMap = { red: '#ef4444', green: '#22c55e', yellow: '#f59e0b', accent: 'var(--accent)' };
-
-  const addBtn = `<button onclick="openModalWithDate('${date}')" style="width:100%;padding:10px 14px;background:var(--accent);border:none;border-radius:var(--radius-sm);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;box-shadow:0 4px 12px var(--accent-glow)"><i class="fas fa-plus"></i> Añadir aviso el ${formatFecha(date)}</button>`;
-
+ 
+  const addBtn = `<button onclick="openModalWithDate('${date}')" style="width:100%;padding:10px 14px;background:var(--accent);border:none;border-radius:var(--radius-sm);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;box-shadow:0 4px 12px var(--accent-glow)"><i class="fas fa-plus"></i> Añadir tarea el ${formatFecha(date)}</button>`;
+ 
   if (dayAvisos.length === 0) {
-    container.innerHTML = `${addBtn}<div class="empty-state" style="padding:16px"><i class="fas fa-calendar-check" style="font-size:1.5rem"></i><p style="font-size:0.85rem">Sin avisos este día</p></div>`;
+    container.innerHTML = `${addBtn}<div class="empty-state" style="padding:16px"><i class="fas fa-calendar-check" style="font-size:1.5rem"></i><p style="font-size:0.85rem">Sin tareas este día</p></div>`;
     return;
   }
-
+ 
   container.innerHTML = `
     ${addBtn}
-    <div style="font-size:0.75rem;font-weight:600;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:10px">${formatFecha(date)} — ${dayAvisos.length} aviso${dayAvisos.length>1?'s':''}</div>
+    <div style="font-size:0.75rem;font-weight:600;color:var(--text3);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:10px">${formatFecha(date)} — ${dayAvisos.length} tarea${dayAvisos.length>1?'s':''}</div>
     ${dayAvisos.map(a => `
     <div class="aviso-card" style="margin-bottom:8px" onclick="openAvisoDetail('${a.id}')">
       <div class="aviso-color-dot" style="color:${colorMap[a.color]||colorMap.green};background:${colorMap[a.color]||colorMap.green}"></div>
@@ -2628,7 +2809,7 @@ window.selectCalDay = function(date, el) {
     </div>`).join('')}
   `;
 };
-
+ 
 // ─── PERFIL ───
 window.toggleTheme = function() {
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -2642,7 +2823,7 @@ window.toggleTheme = function() {
     localStorage.setItem('rtm-theme', 'dark');
   }
 };
-
+ 
 window.setAccent = function(a, el) {
   document.documentElement.setAttribute('data-accent', a);
   document.querySelectorAll('.accent-opt').forEach(o => {
@@ -2651,41 +2832,41 @@ window.setAccent = function(a, el) {
   });
   localStorage.setItem('rtm-accent', a);
 };
-
+ 
 window.toggleVib = function() {
   vibOn = !vibOn;
   document.getElementById('vib-toggle').classList.toggle('on', vibOn);
   localStorage.setItem('rtm-vib', vibOn);
   if (vibOn) vibrate();
 };
-
+ 
 // ─── UTILS ───
 function vibrate() {
   if (vibOn && navigator.vibrate) navigator.vibrate(30);
 }
-
+ 
 function showToast(msg, duration) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), duration || 2500);
 }
-
+ 
 function formatEuro(n) {
   return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(n || 0);
 }
-
+ 
 function formatFecha(str) {
   if (!str) return '';
   const [y,m,d] = str.split('-');
   const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
   return `${parseInt(d)} ${months[parseInt(m)-1]} ${y}`;
 }
-
+ 
 function escHtml(str) {
   return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
+ 
 // Fix storage ref usage
 window.addEventListener('load', () => {
   // patch getDownloadURL / uploadBytes / ref from firebase
@@ -2709,13 +2890,13 @@ window.addEventListener('load', () => {
     }
   };
 });
-
+ 
 // Init light theme by default
 document.documentElement.setAttribute('data-theme', 'light');
-
+ 
 // Mostrar pantalla de carga al arrancar
 document.getElementById('loading-screen').style.display = 'flex';
-
+ 
 // ─── START AUTH LISTENER ───
 // Wait for module to expose _fns, then attach auth state
 (function waitForFirebase() {
