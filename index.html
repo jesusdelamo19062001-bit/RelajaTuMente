@@ -516,7 +516,7 @@ body::before {
 .btn-add:hover { transform: scale(1.08) rotate(90deg); box-shadow: 0 8px 24px var(--accent-glow); }
  
 /* ─── AVISO CARD ─── */
-.avisos-list { display: flex; flex-direction: column; gap: 10px; }
+.avisos-list { display: flex; flex-direction: column; gap: 0; }
  
 .aviso-card {
   background: var(--card);
@@ -1142,6 +1142,7 @@ body::before {
   overflow: hidden;
   border-radius: var(--radius);
   margin-bottom: 10px;
+  isolation: isolate;
 }
 .swipe-action-bg {
   position: absolute;
@@ -1154,7 +1155,9 @@ body::before {
   font-weight: 600;
   color: #fff;
   pointer-events: none;
+  opacity: 0;
   transition: opacity 0.15s;
+  z-index: 1;
 }
 .swipe-action-bg.right { background: var(--green); justify-content: flex-start; }
 .swipe-action-bg.left  { background: var(--yellow); justify-content: flex-end; }
@@ -1166,6 +1169,13 @@ body::before {
   will-change: transform;
 }
 .swipe-card-inner.swiping { transition: none; }
+/* Ensure card bg is opaque inside swipe wrappers to avoid bleed-through */
+.swipe-wrapper .aviso-card {
+  background: var(--card-solid);
+}
+[data-theme="light"] .swipe-wrapper .aviso-card {
+  background: #ffffff;
+}
  
 /* ─── AVISO OVERDUE BANNER ─── */
 .avisos-overdue-section {
@@ -1362,53 +1372,6 @@ body::before {
     </div>
   </div>
 
-  <!-- TAREAS -->
-  <div class="page" id="page-tareas">
-    <div class="page-header">
-      <div class="page-title">
-        Tareas
-        <small id="tareas-count">Cargando...</small>
-      </div>
-      <button class="btn-add" onclick="openModal('modal-tarea')"><i class="fas fa-plus"></i></button>
-    </div>
-
-    <div class="chips">
-      <button class="chip active" onclick="filterTareas('pendiente', this)">Pendientes</button>
-      <button class="chip" onclick="filterTareas('resueltas', this)">Resueltas</button>
-    </div>
-
-    <div class="search-bar-wrap">
-      <i class="fas fa-search search-bar-icon"></i>
-      <input type="text" class="search-bar-input" id="tareas-search" placeholder="Buscar tarea..." oninput="renderTareas()">
-    </div>
-
-    <div class="avisos-list" id="tareas-list">
-      <div class="empty-state"><i class="fas fa-tasks"></i><p>No hay tareas todavía.<br>Pulsa + para añadir una.</p></div>
-    </div>
-  </div>
- 
-  <!-- CALENDARIO -->
-  <div class="page" id="page-calendario">
-    <div class="page-header">
-      <div class="page-title">Calendario</div>
-    </div>
- 
-    <div class="cal-header">
-      <button class="cal-nav" onclick="changeMonth(-1)"><i class="fas fa-chevron-left"></i></button>
-      <div class="cal-month" id="cal-month-label">Mayo 2025</div>
-      <button class="cal-nav" onclick="changeMonth(1)"><i class="fas fa-chevron-right"></i></button>
-    </div>
- 
-    <div class="cal-grid" id="cal-grid"></div>
- 
-    <div id="cal-day-avisos">
-      <div class="empty-state" style="padding:20px">
-        <i class="fas fa-calendar-day" style="font-size:1.8rem"></i>
-        <p style="font-size:0.85rem">Pulsa un día para ver sus tareas</p>
-      </div>
-    </div>
-  </div>
- 
   <!-- PRESUPUESTOS -->
   <div class="page" id="page-presupuestos">
     <div class="page-header">
@@ -1434,6 +1397,28 @@ body::before {
  
     <div id="presup-list">
       <div class="empty-state"><i class="fas fa-file-invoice"></i><p>No hay presupuestos.<br>Pulsa + para crear uno.</p></div>
+    </div>
+  </div>
+ 
+  <!-- CALENDARIO -->
+  <div class="page" id="page-calendario">
+    <div class="page-header">
+      <div class="page-title">Calendario</div>
+    </div>
+ 
+    <div class="cal-header">
+      <button class="cal-nav" onclick="changeMonth(-1)"><i class="fas fa-chevron-left"></i></button>
+      <div class="cal-month" id="cal-month-label">Mayo 2025</div>
+      <button class="cal-nav" onclick="changeMonth(1)"><i class="fas fa-chevron-right"></i></button>
+    </div>
+ 
+    <div class="cal-grid" id="cal-grid"></div>
+ 
+    <div id="cal-day-avisos">
+      <div class="empty-state" style="padding:20px">
+        <i class="fas fa-calendar-day" style="font-size:1.8rem"></i>
+        <p style="font-size:0.85rem">Pulsa un día para ver sus tareas</p>
+      </div>
     </div>
   </div>
  
@@ -1509,17 +1494,13 @@ body::before {
       <i class="fas fa-bell"></i>
       <span>Recordatorios</span>
     </button>
-    <button class="nav-btn" onclick="showPage('tareas',this)">
-      <i class="fas fa-check-square"></i>
-      <span>Tareas</span>
+    <button class="nav-btn" onclick="showPage('presupuestos',this)">
+      <i class="fas fa-file-invoice-dollar"></i>
+      <span>Presupuestos</span>
     </button>
     <button class="nav-btn" onclick="showPage('calendario',this)">
       <i class="fas fa-calendar"></i>
       <span>Calendario</span>
-    </button>
-    <button class="nav-btn" onclick="showPage('presupuestos',this)">
-      <i class="fas fa-file-invoice-dollar"></i>
-      <span>Presupuestos</span>
     </button>
     <button class="nav-btn" onclick="showPage('perfil',this)">
       <i class="fas fa-user"></i>
@@ -1638,20 +1619,6 @@ body::before {
   </div>
 </div>
  
-<!-- MODAL NUEVA TAREA SIMPLE -->
-<div class="modal-overlay" id="modal-tarea">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Nueva tarea</div>
-    <input type="hidden" id="tarea-edit-id">
-    <span class="modal-label">Nombre de la tarea</span>
-    <input type="text" id="tarea-nombre" placeholder="¿Qué tienes que hacer?" style="margin-bottom:0">
-    <div class="modal-actions">
-      <button class="btn-sec" onclick="closeModal('modal-tarea')">Cancelar</button>
-      <button class="btn-modal-save" onclick="saveTarea()">Guardar</button>
-    </div>
-  </div>
-</div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
@@ -1709,10 +1676,8 @@ window._fns._onAuthStateChanged = onAuthStateChanged;
 let currentUser = null;
 let allAvisos = [];
 let allPresupuestos = [];
-let allTareas = [];
 let currentAvisoFilter = 'pendiente';
 let currentPresupFilter = 'pendiente';
-let currentTareasFilter = 'pendiente';
 let selectedAvisoColor = 'green';
 let calYear, calMonth;
 let detailAvisoId = null;
@@ -1722,7 +1687,6 @@ let currentIva = 0;
 let vibOn = true;
 let unsubAvisos = null;
 let unsubPresup = null;
-let unsubTareas = null;
  
 // ─── APP INIT ───
 function showApp(user) {
@@ -1770,7 +1734,6 @@ function showApp(user) {
   // Load data
   loadAvisos();
   loadPresupuestos();
-  loadTareas();
   renderCalendar();
  
   // Test de escritura Firebase al arrancar
@@ -1841,7 +1804,6 @@ window.doLogout = async function() {
   if (!confirm('¿Cerrar sesión?')) return;
   if (unsubAvisos) unsubAvisos();
   if (unsubPresup) unsubPresup();
-  if (unsubTareas) unsubTareas();
   await window._fns.signOut(window._auth);
 };
  
@@ -1869,7 +1831,7 @@ window.showPage = function(page, btn) {
   document.getElementById('page-' + page).classList.add('active');
   if (btn) btn.classList.add('active');
   else {
-    const idx = ['avisos','tareas','calendario','presupuestos','perfil'].indexOf(page);
+    const idx = ['avisos','presupuestos','calendario','perfil'].indexOf(page);
     if (idx >= 0) document.querySelectorAll('.nav-btn')[idx]?.classList.add('active');
   }
   if (page === 'calendario') renderCalendar();
@@ -1926,10 +1888,6 @@ window.closeModal = function(id) {
   if (id === 'modal-presup') {
     // Clear edit id so next open is treated as new
     document.getElementById('presup-edit-id').value = '';
-  }
-  if (id === 'modal-tarea') {
-    document.getElementById('tarea-edit-id').value = '';
-    document.getElementById('tarea-nombre').value = '';
   }
 };
  
@@ -2573,153 +2531,6 @@ window.restaurarAviso = async function(id) {
   if (pendienteChip) pendienteChip.classList.add('active');
 };
  
-// ─── TAREAS SIMPLES ───
-function loadTareas() {
-  const { collection, query, orderBy, onSnapshot } = window._fns;
-  const db = window._db;
-  const q = query(collection(db, 'users', currentUser.uid, 'tareas'), orderBy('createdAt', 'desc'));
-  unsubTareas = onSnapshot(q, snap => {
-    allTareas = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    renderTareas();
-  }, err => {
-    console.error('Error cargando tareas:', err);
-    showToast('Error al cargar tareas');
-  });
-}
-
-function renderTareas(filter) {
-  if (!filter) filter = currentTareasFilter;
-  const list = document.getElementById('tareas-list');
-  const searchQ = (document.getElementById('tareas-search')?.value || '').toLowerCase().trim();
-
-  let data;
-  if (filter === 'resueltas') {
-    data = allTareas.filter(t => t.estado === 'resuelta');
-  } else {
-    data = allTareas.filter(t => t.estado !== 'resuelta');
-  }
-
-  if (searchQ) {
-    data = data.filter(t => (t.nombre||'').toLowerCase().includes(searchQ));
-  }
-
-  const total = allTareas.filter(t => t.estado !== 'resuelta').length;
-  document.getElementById('tareas-count').textContent = total === 0 ? 'Sin tareas pendientes' : `${total} pendiente${total > 1 ? 's' : ''}`;
-
-  if (data.length === 0) {
-    list.innerHTML = `<div class="empty-state"><i class="fas fa-${filter === 'resueltas' ? 'check-circle' : 'tasks'}"></i><p>${filter === 'resueltas' ? 'No hay tareas resueltas.' : 'No hay tareas pendientes.<br>Pulsa + para añadir una.'}</p></div>`;
-    return;
-  }
-
-  const isResueltas = filter === 'resueltas';
-  list.innerHTML = data.map(t => buildTareaCardHTML(t, isResueltas)).join('');
-  attachSwipeListeners();
-}
-
-function buildTareaCardHTML(t, isResuelta) {
-  if (isResuelta) {
-    const fechaRes = t.fechaResuelta ? (() => {
-      const d = new Date(t.fechaResuelta);
-      return `✅ Resuelta el ${d.toLocaleDateString('es-ES', {day:'numeric',month:'short',year:'numeric'})} a las ${d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}`;
-    })() : '✅ Resuelta';
-    return `
-    <div class="swipe-wrapper" data-id="${t.id}" data-type="tarea-resuelta">
-      <div class="swipe-action-bg left swipe-restore-bg"><i class="fas fa-undo" style="margin-right:6px"></i> Restaurar</div>
-      <div class="swipe-card-inner">
-        <div class="aviso-card">
-          <div class="aviso-color-dot" style="color:#22c55e;background:#22c55e"></div>
-          <div class="aviso-info">
-            <div class="aviso-nombre" style="text-decoration:line-through;opacity:0.6">${escHtml(t.nombre)}</div>
-            <div class="aviso-meta">${fechaRes}</div>
-          </div>
-          <div class="aviso-actions" onclick="event.stopPropagation()">
-            <button class="action-btn done" onclick="restaurarTarea('${t.id}')" title="Restaurar" style="background:rgba(245,158,11,0.15);color:var(--yellow)"><i class="fas fa-undo"></i></button>
-            <button class="action-btn del" onclick="eliminarTarea('${t.id}')" title="Eliminar"><i class="fas fa-trash"></i></button>
-          </div>
-        </div>
-      </div>
-    </div>`;
-  }
-  return `
-  <div class="swipe-wrapper" data-id="${t.id}" data-type="tarea">
-    <div class="swipe-action-bg right"><i class="fas fa-check" style="margin-right:6px"></i> Resolver</div>
-    <div class="swipe-card-inner">
-      <div class="aviso-card">
-        <div class="aviso-color-dot" style="color:var(--accent);background:var(--accent)"></div>
-        <div class="aviso-info">
-          <div class="aviso-nombre">${escHtml(t.nombre)}</div>
-        </div>
-        <div class="aviso-actions" onclick="event.stopPropagation()">
-          <button class="action-btn done" onclick="resolverTarea('${t.id}')" title="Marcar como resuelta"><i class="fas fa-check"></i></button>
-          <button class="action-btn del" onclick="eliminarTarea('${t.id}')" title="Eliminar"><i class="fas fa-trash"></i></button>
-        </div>
-      </div>
-    </div>
-  </div>`;
-}
-
-window.filterTareas = function(f, btn) {
-  currentTareasFilter = f;
-  document.querySelectorAll('#page-tareas .chip').forEach(c => c.classList.remove('active'));
-  btn.classList.add('active');
-  renderTareas(f);
-};
-
-window.saveTarea = async function() {
-  const nombre = document.getElementById('tarea-nombre').value.trim();
-  if (!nombre) return showToast('Escribe el nombre de la tarea');
-  if (!currentUser) return showToast('Error: no hay sesión activa');
-  const { collection, addDoc, serverTimestamp } = window._fns;
-  const db = window._db;
-  try {
-    vibrate();
-    await addDoc(collection(db, 'users', currentUser.uid, 'tareas'), {
-      nombre, estado: 'pendiente', createdAt: serverTimestamp()
-    });
-    showToast('Tarea guardada ✓');
-    closeModal('modal-tarea');
-  } catch(e) {
-    console.error('Error guardando tarea:', e);
-    showToast(`Error: ${e.code || e.message}`, 6000);
-  }
-};
-
-window.resolverTarea = async function(id) {
-  const { doc, updateDoc } = window._fns;
-  await updateDoc(doc(window._db, 'users', currentUser.uid, 'tareas', id), {
-    estado: 'resuelta',
-    fechaResuelta: new Date().toISOString()
-  });
-  vibrate();
-  showToast('¡Tarea resuelta! ✓');
-  // Switch to resueltas to show it
-  currentTareasFilter = 'resueltas';
-  document.querySelectorAll('#page-tareas .chip').forEach(c => c.classList.remove('active'));
-  const resueltasChip = document.querySelector('#page-tareas .chip[onclick*="resueltas"]');
-  if (resueltasChip) resueltasChip.classList.add('active');
-};
-
-window.restaurarTarea = async function(id) {
-  const { doc, updateDoc } = window._fns;
-  await updateDoc(doc(window._db, 'users', currentUser.uid, 'tareas', id), {
-    estado: 'pendiente',
-    fechaResuelta: null
-  });
-  vibrate();
-  showToast('Tarea restaurada ✓');
-  currentTareasFilter = 'pendiente';
-  document.querySelectorAll('#page-tareas .chip').forEach(c => c.classList.remove('active'));
-  const pendienteChip = document.querySelector('#page-tareas .chip[onclick*="pendiente"]');
-  if (pendienteChip) pendienteChip.classList.add('active');
-};
-
-window.eliminarTarea = async function(id) {
-  if (!confirm('¿Eliminar esta tarea?')) return;
-  const { doc, deleteDoc } = window._fns;
-  await deleteDoc(doc(window._db, 'users', currentUser.uid, 'tareas', id));
-  showToast('Tarea eliminada');
-};
-
 // ─── RESTAURAR PRESUP A PENDIENTE ───
 window.restaurarPresupAPendiente = async function(id) {
   const { doc, updateDoc } = window._fns;
@@ -2934,7 +2745,7 @@ function attachSwipeListeners() {
       if (!isDragging) return;
       currentX = e.touches[0].clientX - startX;
       // Solo derecha para aviso/presup-aceptar/presup-cobrar/tarea; solo izquierda para restore
-      const isRestore = type === 'aviso-completado' || type === 'presup-restore' || type === 'tarea-resuelta';
+      const isRestore = type === 'aviso-completado' || type === 'presup-restore';
       if (isRestore) {
         if (currentX > 0) currentX = 0;
       } else {
@@ -2961,8 +2772,6 @@ function attachSwipeListeners() {
           try {
             if (type === 'aviso' && currentX > 0) await resolverAviso(id);
             else if (type === 'aviso-completado' && currentX < 0) await restaurarAviso(id);
-            else if (type === 'tarea' && currentX > 0) await resolverTarea(id);
-            else if (type === 'tarea-resuelta' && currentX < 0) await restaurarTarea(id);
             else if (type === 'presup-aceptar' && currentX > 0) await changePresupEstado(id, 'aceptado');
             else if (type === 'presup-cobrar' && currentX > 0) await marcarCobrado(id);
             else if (type === 'presup-restore' && currentX < 0) await restaurarPresupAPendiente(id);
@@ -3189,13 +2998,38 @@ document.getElementById('loading-screen').style.display = 'flex';
   }
 })();
 </script>
-<!-- SERVICE WORKER (PWA install) -->
+<!-- SERVICE WORKER: unregister old SW + force reload on update -->
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
+    navigator.serviceWorker.getRegistrations().then(regs => {
+      regs.forEach(r => r.unregister());
+    });
+    // Clear all caches so deployed changes are always fresh
+    if ('caches' in window) {
+      caches.keys().then(names => names.forEach(n => caches.delete(n)));
+    }
     navigator.serviceWorker.register('/RelajaTuMente/sw.js')
-      .then(r => console.log('SW registrado:', r.scope))
+      .then(r => {
+        console.log('SW registrado:', r.scope);
+        r.onupdatefound = () => {
+          const sw = r.installing;
+          if (sw) {
+            sw.onstatechange = () => {
+              if (sw.state === 'installed' && navigator.serviceWorker.controller) {
+                sw.postMessage({ type: 'SKIP_WAITING' });
+                window.location.reload();
+              }
+            };
+          }
+        };
+      })
       .catch(e => console.error('SW error:', e));
+  });
+  // When SW takes control, reload once
+  let refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!refreshing) { refreshing = true; window.location.reload(); }
   });
 }
 </script>
